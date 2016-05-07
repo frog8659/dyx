@@ -2,6 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="tools" prefix="t"%>
+
+<script type="text/javascript" src="js/page/page.search.js?t=${t:config('token.script')}"></script>
 
 <c:forEach var="authId" items="${user.authList}">
 	<c:if test="${authId eq USER_AUTH_GLSYYHCZRZ}">
@@ -10,7 +13,7 @@
 </c:forEach>
 
 <div class="search">
-	<form action="${base}ord/proc/list" method="post">
+	<form id="srForm" action="${base}ord/proc/list" method="post">
 		<table cellpadding="0" cellspacing="0" class="srTb">
 			<tr>
 				<th width="8%">订单日期：</th>
@@ -36,6 +39,7 @@
 					<input type="text" name="keyword" class="inpSr" value="${condition.keyword}" />
 				</td>
 				<td>
+					<input type="hidden" name="pageNo" id="pageNo" value="${condition.pageNo}" />
 					<input type="submit" name="button" value="查询" class="btn" />
 				</td>
 			</tr>
@@ -90,3 +94,18 @@
 		</c:otherwise>
 	</c:choose>
 </table>
+
+<div class="page-container"></div>
+
+<script type="text/javascript">
+	$(function() {
+		<%-- 初始化分页控件 --%>
+		paging.form.init({
+			form: "#srForm",
+			numb: "#pageNo",
+			page: "${procPage.pageCount}",
+			total: "${procPage.count}",
+			container: ".page-container"
+		});
+	});
+</script>

@@ -1,5 +1,7 @@
 package sh.ricky.dyx.webservice;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +60,7 @@ public class OrderWebService {
      */
     @GET
     @Path("/order/metr/{orderNo}")
-    public DyxOrd getConsumerOrderMetr(@PathParam("orderNo")
-    String orderNo) {
+    public DyxOrd getConsumerOrderMetr(@PathParam("orderNo") String orderNo) {
         // 根据订单编号获取订单对象
         DyxOrd ord = orderService.getOrdByNo(orderNo);
 
@@ -115,6 +116,30 @@ public class OrderWebService {
 
         // 保存或更新订单
         try {
+            Map<String, Object> detail = orderService.getConsumerOrderAppInfo(ord.getOrdNo());
+            if (detail != null && !detail.isEmpty()) {
+                ord.setRec((String) detail.get("consumer_name"));
+                ord.setRecTel((String) detail.get("mobile"));
+                ord.setOrdDate((Date) detail.get("submited_time"));
+                ord.setShopAddr((String) detail.get("consumer_name"));
+                ord.setShopNo((String) detail.get("code"));
+                ord.setOrdAmt(new BigDecimal((String) detail.get("in_price")).divide(new BigDecimal(100)));
+
+                String region = (String) detail.get("region_code");
+                if (StringUtils.isNotBlank(region)) {
+                    if (region.endsWith("0000")) {
+                        ord.setShopProv(region);
+                    } else if (region.endsWith("00")) {
+                        ord.setShopProv(region.substring(0, 2) + "0000");
+                        ord.setShopCity(region);
+                    } else {
+                        ord.setShopProv(region.substring(0, 2) + "0000");
+                        ord.setShopCity(region.substring(0, 4) + "00");
+                        ord.setShopDist(region);
+                    }
+                }
+            }
+
             ord = orderService.updateOrd(ord, null, null);
             // 更新成功，则返回订单审核状态
             map.put("stat", ord.getAudtStat());
@@ -134,8 +159,7 @@ public class OrderWebService {
     @GET
     @SuppressWarnings("unchecked")
     @Path("/order/detail/{orderNo}")
-    public Map<String, Object> getConsumerOrderDetail(@PathParam("orderNo")
-    String orderNo) {
+    public Map<String, Object> getConsumerOrderDetail(@PathParam("orderNo") String orderNo) {
         // 订单详情信息
         Map<String, Object> result = orderService.getConsumerOrderDetail(orderNo);
 
@@ -154,10 +178,8 @@ public class OrderWebService {
     @GET
     @SuppressWarnings("unchecked")
     @Path("/order/list/{logicId}/{userId}/{pageNo}")
-    public List<Map<String, Object>> findConsumerOrderWithPage(@PathParam("logicId")
-    String logicId, @PathParam("userId")
-    String userId, @PathParam("pageNo")
-    int pageNo) {
+    public List<Map<String, Object>> findConsumerOrderWithPage(@PathParam("logicId") String logicId, @PathParam("userId") String userId,
+            @PathParam("pageNo") int pageNo) {
         OrderQueryCondition condition = new OrderQueryCondition();
         condition.setConsumerId(userId);
         condition.setConsumerLogicId(logicId);

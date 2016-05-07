@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import sh.ricky.core.annotation.Outer;
 import sh.ricky.core.constant.ConfigConstants;
 import sh.ricky.core.constant.GlobalConstants;
 import sh.ricky.core.controller.BaseBinder;
@@ -212,6 +213,25 @@ public class OrderController extends BaseBinder {
     }
 
     /**
+     * 订单申请资料文件上传（手机端）
+     * 
+     * @param request
+     * @param atchType
+     * @param dispOrd
+     * @return
+     */
+    @Outer
+    @RequestMapping("/upload_mob/{atchType}/{dispOrd}")
+    public ResponseEntity<Map<String, Object>> uploadMob(HttpServletRequest request, @PathVariable("atchType") String atchType,
+            @PathVariable("dispOrd") Integer dispOrd) {
+        DyxOrdMetrAttach attach = new DyxOrdMetrAttach();
+        attach.setAtchType(atchType);
+        attach.setDispOrd(dispOrd);
+
+        return this.upload(request, attach);
+    }
+
+    /**
      * 订单申请资料文件上传
      * 
      * @param request
@@ -236,7 +256,8 @@ public class OrderController extends BaseBinder {
 
                     // 限制附件大小
                     if (fileMaxSize < file.getSize()) {
-                        map.put("error", "附件大小不得超过" + new BigDecimal(fileMaxSize).divide(new BigDecimal(1024 * 1024)).setScale(1, BigDecimal.ROUND_FLOOR) + "！");
+                        map.put("error",
+                                "附件大小不得超过" + new BigDecimal(fileMaxSize).divide(new BigDecimal(1024 * 1024)).setScale(1, BigDecimal.ROUND_FLOOR) + "！");
                     }
 
                     // 文件扩展名限制
@@ -283,8 +304,7 @@ public class OrderController extends BaseBinder {
     @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
     @ResponseBody
     @RequestMapping("/attach/{uuid}")
-    public void attach(HttpServletResponse response, @PathVariable
-    String uuid) {
+    public void attach(HttpServletResponse response, @PathVariable String uuid) {
         DyxOrdMetrAttach attach = orderService.getAttach(uuid);
         if (attach != null) {
             File file = new File(ConfigConstants.getInstance().get("file.attach.dir") + uuid + "/" + attach.getAtchName());

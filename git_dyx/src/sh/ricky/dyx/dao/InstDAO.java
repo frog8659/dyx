@@ -123,11 +123,26 @@ public class InstDAO extends BaseDAO {
     /**
      * 根据分期业务名称查询符合条件的分期业务数量
      * 
+     * @param instId
      * @param instName
      * @return
      */
-    public int countInst(String instName) {
-        return super.countByJPQL("select count(*) from DyxInst where instName = ?1)", instName);
+    public int countInst(String instId, String instName) {
+        Map<String, Object> params = new HashMap<String, Object>();
+
+        if (StringUtils.isBlank(instName)) {
+            return 0;
+        } else {
+            params.put("instName", instName);
+        }
+
+        StringBuilder jpql = new StringBuilder("select count(*) from DyxInst where instName = :instName");
+        if (StringUtils.isNotBlank(instId)) {
+            jpql.append(" and instId != :instId");
+            params.put("instId", instId);
+        }
+
+        return super.countByJPQL(jpql.toString(), params);
     }
 
     /**

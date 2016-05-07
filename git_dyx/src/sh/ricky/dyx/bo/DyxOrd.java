@@ -404,13 +404,15 @@ public class DyxOrd implements java.io.Serializable {
 
     @Transient
     public Map<String, DyxOrdEval> getDyxOrdEvalMap() {
+        if (dyxOrdEvalSet == null) {
+            return null;
+        }
+
         Map<String, DyxOrdEval> map = new LinkedHashMap<String, DyxOrdEval>();
-        if (dyxOrdEvalSet != null) {
-            for (DyxOrdEval eval : dyxOrdEvalSet) {
-                String evalName = eval.getEvalName();
-                if (StringUtils.isNotBlank(evalName)) {
-                    map.put(evalName, eval);
-                }
+        for (DyxOrdEval eval : dyxOrdEvalSet) {
+            String evalName = eval.getEvalName();
+            if (StringUtils.isNotBlank(evalName)) {
+                map.put(evalName, eval);
             }
         }
         return map;

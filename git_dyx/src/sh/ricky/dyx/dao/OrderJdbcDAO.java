@@ -23,40 +23,66 @@ public class OrderJdbcDAO extends BaseJdbcDAO {
     private static final String JNDI_BUSINESS = ConfigConstants.getInstance().get("jdbc.business");
 
     /**
-     * 根据订单号查询消费者订单详情
+     * 根据订单号查询消费者订单申请信息
      * 
      * @param orderNo
      * @return
      */
-    public Map<String, Object> getConsumerOrderDetail(String orderNo) {
+    public Map<String, Object> getConsumerOrderAppInfo(String orderNo) {
         if (StringUtils.isBlank(orderNo)) {
             return null;
         }
 
         StringBuilder sql = new StringBuilder();
-        sql.append(" select a.order_no, concat(b.first_name, b.last_name) as consumer_name, b.mobile, a.submited_time, c.name as merchant_name, c.address");
+        sql.append(" select a.order_no, a.submited_time, a.in_price, ");
+        sql.append(" concat(b.first_name, b.last_name) as consumer_name, b.mobile, ");
+        sql.append(" c.name as merchant_name, c.address, c.region_code, c.code");
         sql.append(" from order_consumer_installment a, consumer b, merchant c where a.consumer_id = b.account_id and a.re_merchant_id = c.id");
         sql.append(" and a.order_no = ?");
 
-        Map<String, Object> result = super.findUnique(JNDI_EASYBIKE, sql.toString(), orderNo);
+        return super.findUnique(JNDI_EASYBIKE, sql.toString(), orderNo);
+    }
 
-        if (result == null || result.isEmpty()) {
+    /**
+     * 根据订单号查询消费者订单审核信息
+     * 
+     * @param orderNo
+     * @return
+     */
+    public Map<String, Object> getConsumerOrderAuthInfo(String orderNo) {
+        if (StringUtils.isBlank(orderNo)) {
             return null;
         }
 
-        Map<String, Object> result2 = super.findUnique(JNDI_BUSINESS, " select audt_stat from dyx_ord where ord_no = ?", orderNo);
-        if (result2 != null && !result2.isEmpty()) {
-            result.put("stat", result2.get("audt_stat"));
-        }
-
-        List<Map<String, Object>> result3 = super.find(JNDI_EASYBIKE,
-                "select goods_name, color_name, transport_price, price, num from order_consumer_installment_item where order_no = ?", orderNo);
-        if (result3 != null && !result3.isEmpty()) {
-            result.put("goods", result3);
-        }
-
-        return result;
+        return super.findUnique(JNDI_BUSINESS, "select audt_stat from dyx_ord where ord_no = ?", orderNo);
     }
+
+    /**
+     * 根据订单号查询消费者订单商品信息
+     * 
+     * @param orderNo
+     * @return
+     */
+    public List<Map<String, Object>> getConsumerOrderGoodsInfo(String orderNo) {
+        if (StringUtils.isBlank(orderNo)) {
+            return null;
+        }
+
+        String sql = "select goods_name, color_name, transport_price, price, num from order_consumer_installment_item where order_no = ?";
+
+        return super.find(JNDI_EASYBIKE, sql, orderNo);
+    }
+
+    // public Map<String, Map<String, Object>> findSubmittedOrderWithMap(List<String> orders) {
+    // if (orders == null || !orders.isEmpty()) {
+    // return null;
+    // }
+    //
+    // Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+    // Map<String, Object> params = new HashMap<String, Object>();
+    //
+    // return map;
+    // }
 
     /**
      * 根据条件查询消费者订单页对象

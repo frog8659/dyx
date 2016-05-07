@@ -565,19 +565,21 @@ public class DyxOrdMetr implements java.io.Serializable {
 
     @Transient
     public Map<String, Map<String, DyxOrdMetrAttach>> getDyxOrdMetrAttachMap() {
+        if (dyxOrdMetrAttachSet == null) {
+            return null;
+        }
+
         Map<String, Map<String, DyxOrdMetrAttach>> map = new LinkedHashMap<String, Map<String, DyxOrdMetrAttach>>();
-        if (dyxOrdMetrAttachSet != null) {
-            for (DyxOrdMetrAttach attach : dyxOrdMetrAttachSet) {
-                String type = attach.getAtchType();
-                Integer dispOrd = attach.getDispOrd();
-                if (StringUtils.isBlank(type) || dispOrd == null) {
-                    continue;
-                }
-                if (!map.containsKey(type)) {
-                    map.put(type, new LinkedHashMap<String, DyxOrdMetrAttach>());
-                }
-                map.get(type).put(dispOrd.toString(), attach);
+        for (DyxOrdMetrAttach attach : dyxOrdMetrAttachSet) {
+            String type = attach.getAtchType();
+            Integer dispOrd = attach.getDispOrd();
+            if (StringUtils.isBlank(type) || dispOrd == null) {
+                continue;
             }
+            if (!map.containsKey(type)) {
+                map.put(type, new LinkedHashMap<String, DyxOrdMetrAttach>());
+            }
+            map.get(type).put(dispOrd.toString(), attach);
         }
         return map;
     }
@@ -597,15 +599,17 @@ public class DyxOrdMetr implements java.io.Serializable {
 
     @Transient
     public Map<String, DyxOrdMetrContact> getDyxOrdMetrContactMap() {
+        if (dyxOrdMetrContactSet == null) {
+            return null;
+        }
+
         Map<String, DyxOrdMetrContact> map = new LinkedHashMap<String, DyxOrdMetrContact>();
-        if (dyxOrdMetrContactSet != null) {
-            for (DyxOrdMetrContact contact : dyxOrdMetrContactSet) {
-                Integer dispOrd = contact.getDispOrd();
-                if (dispOrd == null) {
-                    continue;
-                }
-                map.put(dispOrd.toString(), contact);
+        for (DyxOrdMetrContact contact : dyxOrdMetrContactSet) {
+            Integer dispOrd = contact.getDispOrd();
+            if (dispOrd == null) {
+                continue;
             }
+            map.put(dispOrd.toString(), contact);
         }
         return map;
     }

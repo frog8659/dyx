@@ -83,7 +83,45 @@ public class OrderService {
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public Map<String, Object> getConsumerOrderDetail(String orderNo) {
-        return orderJdbcDAO.getConsumerOrderDetail(orderNo);
+        Map<String, Object> result = orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
+
+        if (result == null || result.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Object> result2 = orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
+        if (result2 != null && !result2.isEmpty()) {
+            result.put("stat", result2.get("audt_stat"));
+        }
+
+        List<Map<String, Object>> result3 = orderJdbcDAO.getConsumerOrderGoodsInfo(orderNo);
+        if (result3 != null && !result3.isEmpty()) {
+            result.put("goods", result3);
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据订单号查询订单申请信息
+     * 
+     * @param orderNo
+     * @return
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public Map<String, Object> getConsumerOrderAppInfo(String orderNo) {
+        return orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
+    }
+
+    /**
+     * 根据订单号查询订单商品信息
+     * 
+     * @param orderNo
+     * @return
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public List<Map<String, Object>> getConsumerOrderGoodsInfo(String orderNo) {
+        return orderJdbcDAO.getConsumerOrderGoodsInfo(orderNo);
     }
 
     /**
@@ -230,7 +268,7 @@ public class OrderService {
      */
     @Transactional
     public DyxOrdMetrAttach updateAttach(DyxOrdMetrAttach attach, MultipartFile file) throws IOException {
-        if (StringUtils.isBlank(attach.getAtchType()) || attach.getDispOrd() == null || StringUtils.isBlank(attach.getMetrId())) {
+        if (StringUtils.isBlank(attach.getAtchType()) || attach.getDispOrd() == null) {
             return null;
         }
 

@@ -107,7 +107,7 @@ public class InstService {
      * @return
      */
     public String verifyInst(DyxInst inst) {
-        int count = instDAO.countInst(inst.getInstName());
+        int count = instDAO.countInst(inst.getInstId(), inst.getInstName());
 
         if (count > 0) {
             return "已存在相同名称的分期业务！";

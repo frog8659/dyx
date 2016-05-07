@@ -2,9 +2,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="tools" prefix="t"%>
+
+<script type="text/javascript" src="js/page/page.search.js?t=${t:config('token.script')}"></script>
 
 <div class="search">
-	<form action="${base}ord/audit/list" method="post">
+	<form id="srForm" action="${base}ord/audit/list" method="post">
 		<table cellpadding="0" cellspacing="0" class="srTb">
 			<tr>
 				<th>订单日期：</th>
@@ -35,6 +38,7 @@
 				</td>
 				<td>
 					<input type="hidden" name="ordType" value="${condition.ordType}" />
+					<input type="hidden" name="pageNo" id="pageNo" value="${condition.pageNo}" />
 					<input type="submit" name="button" value="查询" class="btn" />
 				</td>
 			</tr>
@@ -101,8 +105,19 @@
 	</c:choose>
 </table>
 
+<div class="page-container"></div>
+
 <script type="text/javascript">
 	$(function() {
+		<%-- 初始化分页控件 --%>
+		paging.form.init({
+			form: "#srForm",
+			numb: "#pageNo",
+			page: "${ordPage.pageCount}",
+			total: "${ordPage.count}",
+			container: ".page-container"
+		});
+		
 		<%-- 初始化行政区划联动 --%>
 		$(".search").cxSelect({
 			url: "js/cityData.min.json",
