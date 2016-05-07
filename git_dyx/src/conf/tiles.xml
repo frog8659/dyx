@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+	<!-- 基础界面 -->
+	<definition name="base.definition" template="/WEB-INF/jsp/layout/base.jsp">
+		<put-attribute name="title" value="/WEB-INF/jsp/common/title.jsp" />
+		<put-attribute name="head" value="/WEB-INF/jsp/common/head.jsp" />
+		<put-attribute name="main" value="" />
+	</definition>
+
+	<!-- 主界面 -->
+	<definition name="main.definition" template="/WEB-INF/jsp/layout/main.jsp">
+		<put-attribute name="head" value="/WEB-INF/jsp/common/head.jsp" />
+		<put-attribute name="main" value="" />
+	</definition>
+
+	<!-- 弹出界面 -->
+	<definition name="popup.definition" template="/WEB-INF/jsp/layout/popup.jsp">
+		<put-attribute name="head" value="/WEB-INF/jsp/common/head.jsp" />
+		<put-attribute name="main" value="" />
+	</definition>
+
+	<!-- 用户登录 -->
+	<definition name="passport/login" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/passport/login.jsp" />
+	</definition>
+
+	<!-- 密码重置 -->
+	<definition name="passport/pwd_res" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/passport/pwd_res.jsp" />
+	</definition>
+
+	<!-- 密码修改 -->
+	<definition name="passport/pwd_chg" extends="main.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/passport/pwd_chg.jsp" />
+	</definition>
+
+	<!-- 系统首页 -->
+	<definition name="common/home" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/common/home.jsp" />
+	</definition>
+
+	<!-- 详情界面 -->
+	<definition name="info/*" extends="main.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/info/{1}.jsp" />
+	</definition>
+
+	<!-- 列表界面 -->
+	<definition name="list/*" extends="main.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/list/{1}.jsp" />
+	</definition>
+
+	<!-- 弹出窗口 -->
+	<definition name="popup/*" extends="popup.definition">
+		<put-attribute name="main" value="/WEB-INF/jsp/popup/{1}.jsp" />
+	</definition>
+</tiles-definitions>
