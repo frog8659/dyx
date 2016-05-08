@@ -280,6 +280,7 @@
 			</table>
 		</div>
 		<div class="info" metr="5">
+			<input type="file" name="file" id="attach" class="out" />
 			<table cellpadding="0" cellspacing="0" class="listTb infoList nwTb">
 				<tbody>
 					<tr>
@@ -414,6 +415,50 @@
 
 		<%-- 初始化附件图片展示 --%>
 		loadImages();
+		
+		<%-- 初始化上传控件 --%>
+		var file = $("#attach").ajaxfileupload({
+			"action": "ord/upload",
+			"params": {
+				"atchId": function() {
+					return file.data("inp").val();
+				},
+				"atchType": function() {
+					return file.data("inp").attr("x");
+				},
+				"dispOrd": function() {
+					return file.data("inp").attr("y");
+				},
+				"metrId": "${metr.metrId}"
+			},
+			"onComplete": function(data) {
+				window.top.loaded();
+				
+				if(typeof data.status != "undefined" && !data.status) {
+					alert("只支持jpg、jpeg、gif、png格式的图片附件！");
+					return false;
+				}
+				
+				if(typeof data.error != "undefined") {
+					alert(data.error);
+					return false;
+				}
+				
+				if(typeof data.attach != "undefined") {
+					this.data("inp").val(data.attach.atchId).attr("rel", data.attach.atchTitle);
+					this.data("img").attr("src", "data:image/" + data.attach.atchExt + ";base64," + data.attach.atchPreview).show().prev("strong").hide();
+					
+					<%-- 重新加载附件图片 --%>
+					loadImages();
+				}
+			},
+			"onStart": function () {
+				window.top.loading();
+			},
+			"onCancel": function() {
+				window.top.loaded();
+			}
+	    });
 	});
 
 	<%-- 加载图片 --%>
@@ -662,45 +707,9 @@
 		
 		var inp = $("[name='attach[" + idx + "].atchId']");
 		var img = $(img);
-		var file = $(document.createElement("input")).attr("name", "file").attr("type", "file").hide().appendTo("body");
-		file.ajaxfileupload({
-			"action": "ord/upload",
-			"params": {
-				"atchId": inp.val(),
-				"atchType": inp.attr("x"),
-				"dispOrd": inp.attr("y"),
-				"metrId": "${metr.metrId}"
-			},
-			"onComplete": function(data) {
-				window.top.loaded();
-				
-				if(typeof data.status != "undefined" && !data.status) {
-					alert("只支持jpg、jpeg、gif、png格式的图片附件！");
-					return false;
-				}
-				
-				if(typeof data.error != "undefined") {
-					alert(data.error);
-					return false;
-				}
-				
-				if(typeof data.attach != "undefined") {
-					inp.val(data.attach.atchId).attr("rel", data.attach.atchTitle);
-					img.attr("src", "data:image/" + data.attach.atchExt + ";base64," + data.attach.atchPreview).show();
-					img.prev("strong").hide();
-					
-					<%-- 重新加载附件图片 --%>
-					loadImages();
-				}
-				
-				file.remove();
-			},
-			"onStart": function () {
-				window.top.loading();
-			},
-			"onCancel": function() {
-				window.top.loaded();
-			}
-	    }).click();
+		return $("#attach").data({
+			"inp": inp,
+			"img": img
+		}).click();
 	}
 </script>

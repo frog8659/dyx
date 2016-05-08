@@ -3,3 +3,6 @@
 @import "__base/loading.css";
 @import "__base/verify.css";
 @import "__base/toggle.css";
+
+/* Common */
+.out { position:absolute; top:-9999em; }
