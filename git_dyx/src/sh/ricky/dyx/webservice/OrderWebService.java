@@ -18,7 +18,10 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.cloopen.rest.sdk.CCPRestSDK;
+
 import sh.ricky.core.bean.Page;
+import sh.ricky.core.constant.ConfigConstants;
 import sh.ricky.core.util.CascadeUtil;
 import sh.ricky.dyx.bean.OrderQueryCondition;
 import sh.ricky.dyx.bo.DyxOrd;
@@ -32,6 +35,14 @@ import sh.ricky.dyx.util.SysUtil;
 public class OrderWebService {
     @Autowired
     private OrderService orderService;
+
+    private static CCPRestSDK ccp = new CCPRestSDK();
+
+    static {
+        ccp.init(ConfigConstants.getInstance().get("ccp.url"), ConfigConstants.getInstance().get("ccp.port"));
+        ccp.setAccount(ConfigConstants.getInstance().get("ccp.account_sid"), ConfigConstants.getInstance().get("ccp.auth_token"));
+        ccp.setAppId(ConfigConstants.getInstance().get("ccp.app_id"));
+    }
 
     /**
      * 获取JSON格式数据
@@ -193,5 +204,23 @@ public class OrderWebService {
 
         // 以JSON格式返回
         return this.getData((List<Map<String, Object>>) page.getResult(), List.class);
+    }
+
+    /**
+     * 发送短信
+     * 
+     * @param request
+     * @param mobile
+     * @param templateId
+     * @return
+     */
+    @GET
+    @Path("/sms/{mobile}/{templateId}")
+    public Object sendShortMessage(@Context HttpServletRequest request, @PathParam("mobile") String mobile, @PathParam("templateId") String templateId) {
+        String[] data = null;
+        Map<String, Object> result = ccp.sendTemplateSMS(mobile, templateId, data);
+
+        // 以JSON格式返回
+        return this.getData(result, Map.class);
     }
 }
