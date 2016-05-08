@@ -16,7 +16,7 @@ import sh.ricky.core.constant.ConfigConstants;
 import sh.ricky.core.constant.GlobalConstants;
 import sh.ricky.core.util.FormUtil;
 import sh.ricky.dyx.bean.UserInfo;
-import sh.ricky.dyx.bo.DyxUser;
+import sh.ricky.dyx.bean.UserQueryCondition;
 import sh.ricky.dyx.service.UserService;
 
 /**
@@ -66,7 +66,7 @@ public class PassportController {
      */
     @Outer
     @RequestMapping("/login")
-    public String login(DyxUser loginInfo, HttpSession session, Model model) {
+    public String login(UserQueryCondition loginInfo, HttpSession session, Model model) {
         if (!FormUtil.isObjectEmpty(loginInfo)) {
             // 根据用户信息登录系统
             UserInfo user = userService.getUserInfo(loginInfo.getUserName(), loginInfo.getUserPwd());
