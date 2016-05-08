@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import sh.ricky.core.constant.ConfigConstants;
+import sh.ricky.core.constant.DicConstants;
 import sh.ricky.core.constant.GlobalConstants;
 import sh.ricky.dyx.bean.CfgFlow;
 import sh.ricky.dyx.bean.CfgMenu;
@@ -20,6 +21,8 @@ import sh.ricky.dyx.constant.UserConstants;
 @SuppressWarnings("unused")
 public class DicDAO extends BaseJdbcDAO {
     private static final String JNDI_BUSINESS = ConfigConstants.getInstance().get("jdbc.business");
+
+    private static final String JNDI_EASYBIKE = ConfigConstants.getInstance().get("jdbc.easybike");
 
     /**
      * 根据查询结果集组装字典
@@ -218,20 +221,32 @@ public class DicDAO extends BaseJdbcDAO {
      * @return
      */
     public Map<String, String> getDicOpUser() {
-        StringBuilder sql = new StringBuilder("select * from DYX_USER");
-        sql.append(" where exists (select 1 from CFG_ROLE_AUTH where ROLE_ID = USER_ROLE and AUTH_ID in (:menu))");
-        sql.append(" and exists (select 1 from CFG_ROLE_AUTH where ROLE_ID = USER_ROLE and AUTH_ID in (:func))");
+        StringBuilder sql = new StringBuilder("select * from account_company_detail a, account b");
+        sql.append(" where a.account_id = b.id and account_category in (1, 3, 4, 6) and valid = 1");
+        sql.append(" and exists (select 1 from role_account where account_id = a.account_id and role_id = 1)");
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("menu", Arrays.asList(UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS));
-        params.put("func", Arrays.asList(UserConstants.USER_AUTH_GLDQYHCZRZ, UserConstants.USER_AUTH_GLSYYHCZRZ));
-
-        List<UserInfo> list = super.find(JNDI_BUSINESS, sql.toString(), new BeanPropertyRowMapper<UserInfo>(UserInfo.class), params);
+        List<Map<String, Object>> result = super.find(JNDI_EASYBIKE, sql.toString());
+        List<UserInfo> list = new ArrayList<UserInfo>();
+        if (result != null) {
+            for (Map<String, Object> user : result) {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setUserId(((Long) user.get("id")).toString());
+                userInfo.setUserName((String) user.get("username"));
+                userInfo.setNickName((String) user.get("name"));
+                userInfo.setUserRole(((Integer) user.get("account_category")).toString());
+                userInfo.setAuthList(DicConstants.getInstance().getDicRoleAuth().get(userInfo.getUserRole()));
+                list.add(userInfo);
+            }
+        }
 
         Map<String, String> map = new LinkedHashMap<String, String>();
         if (list != null) {
             for (UserInfo user : list) {
-                map.put(user.getUserId(), user.getNickName());
+                if ((user.getAuthList().contains(UserConstants.USER_AUTH_CS) || user.getAuthList().contains(UserConstants.USER_AUTH_FS))
+                        && (user.getAuthList().contains(UserConstants.USER_AUTH_GLDQYHCZRZ)
+                                || user.getAuthList().contains(UserConstants.USER_AUTH_GLSYYHCZRZ))) {
+                    map.put(user.getUserId(), user.getNickName());
+                }
             }
         }
 
