@@ -28,10 +28,6 @@ public class OrderQueryCondition extends QueryCondition {
 
     private String opUserId;
 
-    private String consumerId;
-
-    private String consumerLogicId;
-
     private List<String> audtStatList;
 
     public String getOrdId() {
@@ -128,22 +124,6 @@ public class OrderQueryCondition extends QueryCondition {
 
     public void setOpUserId(String opUserId) {
         this.opUserId = opUserId;
-    }
-
-    public String getConsumerId() {
-        return consumerId;
-    }
-
-    public void setConsumerId(String consumerId) {
-        this.consumerId = consumerId;
-    }
-
-    public String getConsumerLogicId() {
-        return consumerLogicId;
-    }
-
-    public void setConsumerLogicId(String consumerLogicId) {
-        this.consumerLogicId = consumerLogicId;
     }
 
     public List<String> getAudtStatList() {

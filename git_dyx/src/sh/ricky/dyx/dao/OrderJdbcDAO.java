@@ -108,14 +108,9 @@ public class OrderJdbcDAO extends BaseJdbcDAO {
             sql4.append(" limit ").append((condition.getPageNo() - 1) * condition.getPageSize()).append(", ").append(condition.getPageSize());
         }
 
-        if (StringUtils.isNotBlank(condition.getConsumerId())) {
+        if (StringUtils.isNotBlank(condition.getOpUserId())) {
             sql3.append(" and a.consumer_id = :consumerId");
-            params.put("consumerId", condition.getConsumerId());
-        }
-
-        if (StringUtils.isNotBlank(condition.getConsumerLogicId())) {
-            sql3.append(" and b.id = :logicId");
-            params.put("logicId", condition.getConsumerLogicId());
+            params.put("consumerId", condition.getOpUserId());
         }
 
         List<Map<String, Object>> result = super.find(JNDI_EASYBIKE, sql1.append(sql3).append(sql4).toString(), params);

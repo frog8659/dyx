@@ -2,6 +2,7 @@ package sh.ricky.dyx.controller;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -221,9 +222,9 @@ public class OrderController extends BaseBinder {
      * @return
      */
     @Outer
+    @ResponseBody
     @RequestMapping("/upload_mob/{atchType}/{dispOrd}")
-    public ResponseEntity<Map<String, Object>> uploadMob(HttpServletRequest request, @PathVariable("atchType") String atchType,
-            @PathVariable("dispOrd") Integer dispOrd) {
+    public Object uploadMob(HttpServletRequest request, @PathVariable("atchType") String atchType, @PathVariable("dispOrd") Integer dispOrd) {
         DyxOrdMetrAttach attach = new DyxOrdMetrAttach();
         attach.setAtchType(atchType);
         attach.setDispOrd(dispOrd);
@@ -290,7 +291,7 @@ public class OrderController extends BaseBinder {
 
         // 回写，json格式
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setContentType(MediaType.TEXT_PLAIN);
+        responseHeaders.setContentType(new MediaType("text", "PLAIN", Charset.forName("UTF-8")));
         return new ResponseEntity<Map<String, Object>>(map, responseHeaders, HttpStatus.OK);
     }
 

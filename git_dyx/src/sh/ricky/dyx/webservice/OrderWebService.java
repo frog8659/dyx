@@ -6,11 +6,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -55,12 +57,13 @@ public class OrderWebService {
     /**
      * 获取分期订单申请资料
      * 
+     * @param request
      * @param orderNo
      * @return
      */
     @GET
     @Path("/order/metr/{orderNo}")
-    public DyxOrd getConsumerOrderMetr(@PathParam("orderNo") String orderNo) {
+    public Object getConsumerOrderMetr(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
         // 根据订单编号获取订单对象
         DyxOrd ord = orderService.getOrdByNo(orderNo);
 
@@ -79,12 +82,13 @@ public class OrderWebService {
     /**
      * 提交分期订单
      * 
+     * @param request
      * @param form
      * @return
      */
     @POST
     @Path("/order/submit")
-    public Map<String, Object> submitConsumerOrder(OrderForm form) {
+    public Object submitConsumerOrder(@Context HttpServletRequest request, OrderForm form) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         if (form == null) {
@@ -153,13 +157,13 @@ public class OrderWebService {
     /**
      * 获取订单详情信息
      * 
+     * @param request
      * @param orderNo
      * @return
      */
     @GET
-    @SuppressWarnings("unchecked")
     @Path("/order/detail/{orderNo}")
-    public Map<String, Object> getConsumerOrderDetail(@PathParam("orderNo") String orderNo) {
+    public Object getConsumerOrderDetail(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
         // 订单详情信息
         Map<String, Object> result = orderService.getConsumerOrderDetail(orderNo);
 
@@ -170,6 +174,7 @@ public class OrderWebService {
     /**
      * 获取订单分页列表
      * 
+     * @param request
      * @param logicId
      * @param userId
      * @param pageNo
@@ -177,12 +182,10 @@ public class OrderWebService {
      */
     @GET
     @SuppressWarnings("unchecked")
-    @Path("/order/list/{logicId}/{userId}/{pageNo}")
-    public List<Map<String, Object>> findConsumerOrderWithPage(@PathParam("logicId") String logicId, @PathParam("userId") String userId,
-            @PathParam("pageNo") int pageNo) {
+    @Path("/order/list/{userId}/{pageNo}")
+    public Object findConsumerOrderWithPage(@Context HttpServletRequest request, @PathParam("userId") String userId, @PathParam("pageNo") int pageNo) {
         OrderQueryCondition condition = new OrderQueryCondition();
-        condition.setConsumerId(userId);
-        condition.setConsumerLogicId(logicId);
+        condition.setOpUserId(userId);
         condition.setPageNo(pageNo);
 
         // 订单信息页对象
