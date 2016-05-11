@@ -361,7 +361,7 @@
 		<div class="btnBox1">
 			<c:if test="${not empty flowList}">
 				<c:if test="${ord.ordType eq ORD_TYPE_KFDB and dicSeg[ord.audtStat] eq '初审'}">
-					<input type="button" class="btn grayBtn" value="取消" onclick="toggleTab()" editable="${YES_VALUE}" />
+					<input type="button" class="btn grayBtn" value="取消" onclick="cancel()" editable="${YES_VALUE}" />
 					<input type="button" class="btn grayBtn" value="保存" onclick="updateMetr('1')" editable="${YES_VALUE}" />
 					<input type="button" class="btn grayBtn" value="修改" onclick="updateMetr('0')" editable="${NO_VALUE}" />
 				</c:if>
@@ -498,21 +498,22 @@
 	}
 	
 	<%-- 更新资料 --%>
-	function updateMetr(v, callback) {
+	function updateMetr(v) {
 		<%-- 更新评审结果 --%>
 		var metr = $("[metr]:visible").first().attr("metr");
 		var audt = $("#tabAudt").val();
 		$("#tabAudt").val(audt.substring(0, metr - 1) + v + audt.substring(metr, audt.length));
-		<%-- 保存资料信息 --%>
-		ajaxSubmit(function() {
+
+		if(v == 1) {
+			<%-- 保存资料信息 --%>
+			ajaxSubmit(function() {
+				<%-- 更新页面展示 --%>
+				updateDisp(metr, v);
+			});
+		} else {
 			<%-- 更新页面展示 --%>
 			updateDisp(metr, v);
-			
-			<%-- 指定回调函数 --%>
-			if(typeof callback == "function") {
-				callback();
-			}
-		});
+		}
 	}
 	
 	<%-- 更新页面展示 --%>
@@ -602,6 +603,21 @@
 				toggleBtn(($("#tabAudt").val())[idx - 1]);
 			}
 		}
+	}
+	
+	<%-- 点击取消按钮 --%>
+	function cancel() {
+		var tab = $("[metr]:visible").first();
+		var idx = tab.attr("metr");
+		
+		<%-- 切换至上一标签页显示 --%>
+		if(idx != "1") {
+			$(".tabs li").eq(Number(idx) - 2).click();
+		}
+		
+		tab.find(":input").val("");
+		tab.find("img").hide().removeAttr("src");
+		tab.find("strong").show();
 	}
 
 	<%-- ajax提交表单 --%>
