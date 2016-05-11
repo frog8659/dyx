@@ -95,6 +95,9 @@ public class DicConstants {
     /** 附件类型字典 */
     private Map<String, String> dicAtchType;
 
+    /** 客户端状态字典 */
+    private Map<String, String> dicClientStat;
+
     /**
      * 私有构造器
      */
@@ -273,6 +276,18 @@ public class DicConstants {
         dicAtchType.put("2", "储蓄卡");
         dicAtchType.put("3", "手持身份证照");
         dicAtchType.put("4", "其他辅助资料");
+
+        // 客户端状态字典
+        this.dicClientStat = new LinkedHashMap<String, String>();
+        dicClientStat.put("0001", "资料已上传");
+        dicClientStat.put("0002", "资料已上传");
+        dicClientStat.put("0003", "审核不通过");
+        dicClientStat.put("0004", "资料需修改");
+        dicClientStat.put("0005", "资料已上传");
+        dicClientStat.put("0006", "审核不通过");
+        dicClientStat.put("0007", "资料已上传");
+        dicClientStat.put("0008", "资料已上传");
+        dicClientStat.put("0009", "资料已上传");
     }
 
     public void refreshDicInstName() {
@@ -392,5 +407,9 @@ public class DicConstants {
 
     public Map<String, String> getDicAtchType() {
         return dicAtchType;
+    }
+
+    public Map<String, String> getDicClientStat() {
+        return dicClientStat;
     }
 }

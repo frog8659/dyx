@@ -89,7 +89,7 @@ public class OrderService {
             return null;
         }
 
-        Map<String, Object> result2 = orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
+        Map<String, Object> result2 = orderJdbcDAO.getConsumerOrderAuthInfo(orderNo);
         if (result2 != null && !result2.isEmpty()) {
             result.put("stat", result2.get("audt_stat"));
         }

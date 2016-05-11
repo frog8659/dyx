@@ -14,7 +14,6 @@ import sh.ricky.core.constant.DicConstants;
 import sh.ricky.core.dao.BaseJdbcDAO;
 import sh.ricky.core.util.DBUtil;
 import sh.ricky.dyx.bean.OrderQueryCondition;
-import sh.ricky.dyx.constant.OrderConstants;
 
 @Repository
 public class OrderJdbcDAO extends BaseJdbcDAO {
@@ -34,7 +33,7 @@ public class OrderJdbcDAO extends BaseJdbcDAO {
         }
 
         StringBuilder sql = new StringBuilder();
-        sql.append(" select a.order_no, a.submited_time, a.in_price, ");
+        sql.append(" select a.order_no, a.submited_time, a.in_price, a.recv_method, ");
         sql.append(" concat(b.first_name, b.last_name) as consumer_name, b.mobile, ");
         sql.append(" c.name as merchant_name, c.address, c.region_code, c.code");
         sql.append(" from order_consumer_installment a, consumer b, merchant c where a.consumer_id = b.account_id and a.re_merchant_id = c.id");
@@ -127,20 +126,12 @@ public class OrderJdbcDAO extends BaseJdbcDAO {
             ((List<Object>) params.get("orders")).add(r.get("order_no"));
         }
 
-        List<Map<String, Object>> result2 = super.find(JNDI_BUSINESS, " select ord_no, audt_stat, ord_type from dyx_ord where ord_no in (:orders)", params);
+        List<Map<String, Object>> result2 = super.find(JNDI_BUSINESS, " select ord_no, audt_stat from dyx_ord where ord_no in (:orders)", params);
         Map<Object, String> map = new HashMap<Object, String>();
         if (result2 != null && !result2.isEmpty()) {
             for (Map<String, Object> r : result2) {
                 String stat = (String) r.get("audt_stat");
-                String type = (String) r.get("ord_type");
-
-                if (OrderConstants.ORD_TYPE_ZZBL.equals(type)) {
-                    map.put(r.get("ord_no"), "门店已代办");
-                } else if (OrderConstants.ORD_TYPE_KFDB.equals(type)) {
-                    map.put(r.get("ord_no"), "自主上传订单");
-                } else {
-                    map.put(r.get("ord_no"), DicConstants.getInstance().getDicSegStat().get(stat));
-                }
+                map.put(r.get("ord_no"), DicConstants.getInstance().getDicClientStat().get(stat));
             }
         }
 
