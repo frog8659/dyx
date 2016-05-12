@@ -91,6 +91,21 @@ public class UserService {
     }
 
     /**
+     * 根据用户名密码获取门店用户对象
+     * 
+     * @param userName
+     * @param userPwd
+     * @return
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public Map<String, Object> getShopUser(String userName, String userPwd) {
+        UserQueryCondition condition = new UserQueryCondition();
+        condition.setUserName(userName);
+        condition.setUserPwd(MD5Util.getMD5(userPwd).toLowerCase());
+        return userDAO.getShopUser(condition);
+    }
+
+    /**
      * 密码修改
      * 
      * @param oriPwd 原密码
