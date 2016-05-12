@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import sh.ricky.core.aspect.BaseAspect;
 import sh.ricky.core.constant.ConfigConstants;
 import sh.ricky.core.constant.GlobalConstants;
-import sh.ricky.dyx.bean.UserInfo;
 import sh.ricky.dyx.service.UserService;
 
 @Repository
@@ -40,9 +39,11 @@ public class MobAspect extends BaseAspect {
             return point.proceed();
         }
 
+        // 认证失败则返回消息
         Map<String, Object> error = new HashMap<String, Object>();
         error.put("error", "认证失败");
 
+        // 获取请求对象
         HttpServletRequest request = null;
         Object[] args = point.getArgs();
         for (Object arg : args) {
@@ -56,13 +57,16 @@ public class MobAspect extends BaseAspect {
             return error;
         }
 
+        // 门店用户登录
         String userName = request.getParameter("userName");
         userName = StringUtils.isBlank(userName) ? (String) request.getAttribute("userName") : userName;
-
+        // 门店用户密码
         String userPwd = request.getParameter("userPwd");
         userPwd = StringUtils.isBlank(userPwd) ? (String) request.getAttribute("userPwd") : userPwd;
-
-        UserInfo user = userService.getUserInfo(userName, userPwd);
+        // 门店用户对象
+        Map<String, Object> user = userService.getShopUser(userName, userPwd);
+        // 将对象放入请求
+        request.setAttribute("shopUser", user);
 
         return user == null ? error : point.proceed();
     }
