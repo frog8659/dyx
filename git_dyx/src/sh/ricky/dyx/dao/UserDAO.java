@@ -28,10 +28,37 @@ public class UserDAO extends BaseJdbcDAO {
         sql.append(" where a.account_id = b.id and account_category in (1, 3, 4, 6) and valid = 1");
         sql.append(" and exists (select 1 from role_account where account_id = a.account_id and role_id = 1)");
 
-        if (StringUtils.isNotBlank(condition.getUserId())) {
-            sql.append(" and a.account_id = :userId");
-            params.put("userId", Integer.parseInt(condition.getUserId()));
+        if (StringUtils.isNotBlank(condition.getUserName())) {
+            sql.append(" and b.username = :userName");
+            params.put("userName", condition.getUserName());
         }
+
+        if (StringUtils.isNotBlank(condition.getUserPwd())) {
+            sql.append(" and b.password = :userPwd");
+            params.put("userPwd", condition.getUserPwd());
+        }
+
+        List<Map<String, Object>> result = super.find(JNDI_EASYBIKE, sql.toString(), params);
+        if (result != null && !result.isEmpty()) {
+            return result.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * 根据条件获取有效门店代办员用户对象
+     * 
+     * @param condition
+     * @return
+     */
+    public Map<String, Object> getShopUser(UserQueryCondition condition) {
+        Map<String, Object> params = new HashMap<String, Object>();
+
+        StringBuilder sql = new StringBuilder("select a.name, a.mobile, b.id, c.code");
+        sql.append(" from account_detail a, account b, merchant_installment_staff c");
+        sql.append(" where a.account_id = b.id and a.account_id = c.account_id and a.role = 2 and c.valid = 1");
+        sql.append(" and exists (select 1 from account_dealer_merchant where account_id = a.account_id and merchant_id != 0)");
 
         if (StringUtils.isNotBlank(condition.getUserName())) {
             sql.append(" and b.username = :userName");
