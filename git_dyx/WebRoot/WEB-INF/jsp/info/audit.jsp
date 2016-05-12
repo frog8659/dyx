@@ -77,11 +77,11 @@
 				<th>自付金额（元）：</th>
 				<td>${metr.instOopAmt}</td>
 				<th>月利率：</th>
-				<td>${metr.instMonIntrRate}%</td>
+				<td>${metr.instMonIntrRate}${empty metr.instMonIntrRate ? "" : "%"}</td>
 				<th>月服务费率：</th>
-				<td>${metr.instMonServRate}%</td>
+				<td>${metr.instMonServRate}${empty metr.instMonServRate ? "" : "%"}</td>
 				<th>保险费率：</th>
-				<td>${metr.instPermRate}%</td>
+				<td>${metr.instPermRate}${empty metr.instPermRate ? "" : "%"}</td>
 				<th>月还款日期：</th>
 				<td colspan="2">${metr.instRepDate}</td>
 			</tr>
