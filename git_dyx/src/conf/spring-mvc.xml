@@ -91,9 +91,7 @@
 	<mvc:resources mapping="/plugins/**" location="/static/plugins/" cache-period="31556926" />
 	<mvc:resources mapping="/data/**" location="/data/" cache-period="31556926" />
 	<!-- demo页面显示 -->
-	<mvc:resources mapping="/demo/images/**" location="/demo/images/" cache-period="31556926" />
-	<mvc:resources mapping="/demo/js/**" location="/demo/js/" cache-period="31556926" />
-	<mvc:resources mapping="/demo/css/**" location="/demo/css/" cache-period="31556926" />
+	<mvc:resources mapping="/demo/**" location="/demo/" cache-period="31556926" />
 	<!-- 系统图标 -->
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" cache-period="31556926" />
 	<!-- Robots协议 -->

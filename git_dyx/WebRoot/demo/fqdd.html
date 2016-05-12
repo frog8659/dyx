@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>道易行金融分期后台管理系统</title>
+<link href="css/public.css" rel="stylesheet" type="text/css" />
+<link href="iconfont/iconfont.css" type="text/css" rel="stylesheet" />
+<script src="js/jquery.1.4.4.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/customer.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="../js/loading/loading.bind.js"></script>
+<div class="box">
+  <div class="location"><i class="iconfont">&#xe60b;</i>当前位置：首页 &raquo; <span>分期订单管理</span></div>
+  <div class="search">
+    <table cellpadding="0" cellspacing="0" class="srTb">
+      <tr>
+        <th>订单日期:</th>
+        <td width="10%"><select name="select">
+            <option>-请选择订单日期-</option>
+          </select></td>
+        <th><p>地区：</p></th>
+        <td width="10%"><select name="select2">
+            <option>-请选择省份-</option>
+          </select></td>
+        <td width="10%"><select name="select6">
+            <option>-请选择城市-</option>
+          </select></td>
+        <td width="10%"><select name="select3">
+            <option>-请选择区县-</option>
+          </select></td>
+        <th>审核状态：</th>
+        <td width="10%"><select name="select4">
+            <option>-请选择审核状态-</option>
+          </select></td>
+        <td width="20%"><input type="text" name="textfield" id="textfield" class="inpSr" /></td>
+        <td><input type="submit" name="button" value="查询" class="btn" /></td>
+      </tr>
+    </table>
+  </div>
+  <table cellpadding="0" cellspacing="0" class="listTb trColor mTop">
+    <thead>
+      <tr>
+        <th width="40">序号</th>
+        <th>订单编号</th>
+        <th>订单日期</th>
+        <th>省</th>
+        <th>市</th>
+        <th>区/县</th>
+        <th>收货人</th>
+        <th>联系电话</th>
+        <th>门店名称</th>
+        <th>代办员</th>
+        <th>联系方式</th>
+        <th>订单状态</th>
+        <th>操作时间</th>
+        <th>操作人</th>
+        <th>备注详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><a href="fqddxq.html" target="_self">5381733656903680</a></td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>张三丰</td>
+        <td>13524650963</td>
+        <td>和平北路旗舰店</td>
+        <td>张勇</td>
+        <td>13854622254</td>
+        <td>协议待提交</td>
+        <td>02-25 18:00</td>
+        <td>银行</td>
+        <td><a href="#">征信通过</a></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>李四</td>
+        <td>13524650963</td>
+        <td>郑汴路旗舰店</td>
+        <td>帅小二</td>
+        <td>13854622254</td>
+        <td>订单取消</td>
+        <td>02-26 18:00</td>
+        <td>张三</td>
+        <td><a href="#">不需要了</a></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>王小五</td>
+        <td>13524650963</td>
+        <td>胜利路店</td>
+        <td>梁超</td>
+        <td>13854622254</td>
+        <td>协议待初审</td>
+        <td>02-27 18:00</td>
+        <td>帅小二</td>
+        <td><a href="#">协议内容提交</a></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>赵倩</td>
+        <td>13524650963</td>
+        <td>二期镇店</td>
+        <td>张永东</td>
+        <td>13854622254</td>
+        <td>协议待复审</td>
+        <td>02-28 18:00</td>
+        <td>余梦杰</td>
+        <td><a href="#">初审完成</a></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>周磊</td>
+        <td>13524650963</td>
+        <td>某某店</td>
+        <td>范朝勇</td>
+        <td>13854622254</td>
+        <td>待重新上传</td>
+        <td>03-1 18:00</td>
+        <td>王秋燕</td>
+        <td><a href="#">资料不齐</a></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>吴正华</td>
+        <td>13524650963</td>
+        <td>某某店</td>
+        <td>凌红</td>
+        <td>13854622254</td>
+        <td>复审通过</td>
+        <td>03-02 18:00</td>
+        <td>王秋燕</td>
+        <td><a href="#">资料正确</a></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>郑凯</td>
+        <td>13524650963</td>
+        <td>某某店</td>
+        <td>刘玄</td>
+        <td>13854622254</td>
+        <td>&nbsp;</td>
+        <td>03-03 18:00</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>钱照进</td>
+        <td>13524650963</td>
+        <td>某某店</td>
+        <td>王建斌</td>
+        <td>13854622254</td>
+        <td>&nbsp;</td>
+        <td>03-04 18:00</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>5381733656903680</td>
+        <td>2015-02-24</td>
+        <td>浙江</td>
+        <td>杭州</td>
+        <td>拱墅区</td>
+        <td>孙学飞</td>
+        <td>13524650963</td>
+        <td>某某店</td>
+        <td>永红</td>
+        <td>13854622254</td>
+        <td>&nbsp;</td>
+        <td>03-05 18:00</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+  <dl class="page">    
+    <dt><a href="#">首页</a> | <a href="#">上一页</a> | <a href="#">下一页</a> | <a href="#">尾页</a>&nbsp;&nbsp;&nbsp;&nbsp;共 135 条记录，当前第1/3页，跳到第
+      <input type="text" name="textfield5" id="textfield5" class="jump" />
+      页
+      <input type="submit" name="button2" id="button2" value="GO" class="btnJump" />
+    </dt>
+    <dd></dd>
+  </dl>
+</div>
+</body>
+</html>
