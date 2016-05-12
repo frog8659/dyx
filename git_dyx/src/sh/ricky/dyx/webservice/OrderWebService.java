@@ -1,9 +1,7 @@
 package sh.ricky.dyx.webservice;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import sh.ricky.core.constant.ConfigConstants;
 import sh.ricky.core.util.CascadeUtil;
 import sh.ricky.dyx.bean.OrderQueryCondition;
 import sh.ricky.dyx.bo.DyxOrd;
-import sh.ricky.dyx.bo.DyxOrdMetr;
 import sh.ricky.dyx.constant.FlowConstants;
 import sh.ricky.dyx.form.OrderForm;
 import sh.ricky.dyx.service.OrderService;
@@ -45,24 +42,37 @@ public class OrderWebService {
     }
 
     /**
-     * 获取JSON格式数据
+     * 统一设置返回数据格式
      * 
      * @param data
-     * @param clz
      * @return
      */
-    private <T> T getData(T data, Class<T> clz) {
-        // 清除多对一关联属性及未加载的集合对象
-        data = SysUtil.clearChain(data);
-        // 清除空属性
-        CascadeUtil.clearObject(data);
+    @SuppressWarnings("rawtypes")
+    private Map<String, Object> getReturnData(Object data) {
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        map.put("data", data);
 
-        // 以JSON格式返回
-        try {
-            return data == null ? clz.newInstance() : data;
-        } catch (Throwable t) {
-            return null;
+        if (data == null) {
+            return map;
         }
+
+        try {
+            // 清除多对一关联属性及未加载的集合对象
+            data = SysUtil.clearChain(data);
+            // 清除空属性
+            CascadeUtil.clearObject(data);
+
+            if (data instanceof Map) {
+                if (((Map) data).containsKey("error")) {
+                    map.put("error", ((Map) data).get("error"));
+                    ((Map) data).remove("error");
+                }
+            }
+        } catch (Throwable t) {
+            map.put("error", "系统出现异常！");
+        }
+
+        return map;
     }
 
     /**
@@ -74,20 +84,20 @@ public class OrderWebService {
      */
     @GET
     @Path("/order/metr/{orderNo}")
-    public Object getConsumerOrderMetr(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
+    public Object getClientOrderMetr(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
         // 根据订单编号获取订单对象
         DyxOrd ord = orderService.getOrdByNo(orderNo);
 
-        if (ord == null) {
-            ord = new DyxOrd();
-            ord.setDyxOrdMetr(new DyxOrdMetr());
-            ord.getDyxOrdMetr().setMetrId(SysUtil.randomUUID());
-        } else {
-            ord.setDyxOrdEvalSet(null);
-            ord.setDyxOrdProcSet(null);
+        if (ord != null) {
+            DyxOrd result = new DyxOrd();
+            result.setOrdType(ord.getOrdType());
+            result.setToken(ord.getToken());
+            result.setDyxOrdMetr(ord.getDyxOrdMetr());
+            ord = result;
         }
 
-        return this.getData(ord, DyxOrd.class);
+        // 以统一数据格式返回
+        return this.getReturnData(ord);
     }
 
     /**
@@ -97,14 +107,15 @@ public class OrderWebService {
      * @param form
      * @return
      */
+    @SuppressWarnings("unchecked")
     @POST
     @Path("/order/submit")
-    public Object submitConsumerOrder(@Context HttpServletRequest request, OrderForm form) {
+    public Object submitClientOrder(@Context HttpServletRequest request, OrderForm form) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         if (form == null) {
             map.put("error", "提交分期订单出错！");
-            return map;
+            return this.getReturnData(map);
         }
 
         // 根据订单编号获取订单对象
@@ -120,10 +131,10 @@ public class OrderWebService {
         String token = ord.getToken();
         if (StringUtils.isBlank(token) && StringUtils.isNotBlank(form.getToken())) {
             map.put("error", "订单不存在或已被处理！");
-            return map;
+            return this.getReturnData(map);
         } else if (StringUtils.isNotBlank(token) && !StringUtils.equals(form.getToken(), token)) {
             map.put("error", "订单不存在或已被处理！");
-            return map;
+            return this.getReturnData(map);
         }
 
         // 根据表单内容更新订单对象
@@ -131,16 +142,15 @@ public class OrderWebService {
 
         // 保存或更新订单
         try {
-            Map<String, Object> detail = orderService.getConsumerOrderAppInfo(ord.getOrdNo());
+            Map<String, Object> detail = orderService.getOrderAppInfo(ord.getOrdNo());
             if (detail != null && !detail.isEmpty()) {
-                ord.setRec((String) detail.get("consumer_name"));
-                ord.setRecTel((String) detail.get("mobile"));
-                ord.setOrdDate((Date) detail.get("submited_time"));
-                ord.setShopAddr((String) detail.get("consumer_name"));
-                ord.setShopNo((String) detail.get("code"));
-                ord.setOrdAmt(new BigDecimal((String) detail.get("in_price")).divide(new BigDecimal(100)));
+                ord.setRec((String) detail.get("rec"));
+                ord.setRecTel((String) detail.get("recTel"));
+                ord.setOrdDate((Date) detail.get("ordDate"));
+                ord.setShopAddr((String) detail.get("shopAddr"));
+                ord.setShopNo((String) detail.get("shopNo"));
 
-                String region = (String) detail.get("region_code");
+                String region = (String) detail.get("shopRegion");
                 if (StringUtils.isNotBlank(region)) {
                     if (region.endsWith("0000")) {
                         ord.setShopProv(region);
@@ -155,6 +165,13 @@ public class OrderWebService {
                 }
             }
 
+            Map<String, Object> user = (Map<String, Object>) request.getAttribute("shopUser");
+            if (user != null) {
+                ord.setAgt((String) user.get("name"));
+                ord.setAgtNo((String) user.get("code"));
+                ord.setAgtTel((String) user.get("mobile"));
+            }
+
             ord = orderService.updateOrd(ord, null, null);
             // 更新成功，则返回订单审核状态
             map.put("stat", ord.getAudtStat());
@@ -162,7 +179,8 @@ public class OrderWebService {
             map.put("error", "订单更新出错！");
         }
 
-        return map;
+        // 以统一数据格式返回
+        return this.getReturnData(map);
     }
 
     /**
@@ -174,36 +192,39 @@ public class OrderWebService {
      */
     @GET
     @Path("/order/detail/{orderNo}")
-    public Object getConsumerOrderDetail(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
+    public Object getClientOrderDetail(@Context HttpServletRequest request, @PathParam("orderNo") String orderNo) {
         // 订单详情信息
-        Map<String, Object> result = orderService.getConsumerOrderDetail(orderNo);
+        Map<String, Object> result = orderService.getClientOrderDetail(orderNo);
 
-        // 以JSON格式返回
-        return this.getData(result, Map.class);
+        // 以统一数据格式返回
+        return this.getReturnData(result);
     }
 
     /**
      * 获取订单分页列表
      * 
      * @param request
-     * @param logicId
-     * @param userId
      * @param pageNo
      * @return
      */
-    @GET
     @SuppressWarnings("unchecked")
-    @Path("/order/list/{userId}/{pageNo}")
-    public Object findConsumerOrderWithPage(@Context HttpServletRequest request, @PathParam("userId") String userId, @PathParam("pageNo") int pageNo) {
-        OrderQueryCondition condition = new OrderQueryCondition();
-        condition.setOpUserId(userId);
-        condition.setPageNo(pageNo);
+    @GET
+    @Path("/order/list/{pageNo}")
+    public Object findClientOrderWithPage(@Context HttpServletRequest request, @PathParam("pageNo") int pageNo) {
+        Map<String, Object> user = (Map<String, Object>) request.getAttribute("shopUser");
+        Page page = Page.EMPTY_PAGE;
 
-        // 订单信息页对象
-        Page page = orderService.findConsumerOrderWithPage(condition);
+        if (user != null && user.containsKey("id")) {
+            OrderQueryCondition condition = new OrderQueryCondition();
+            condition.setOpUserId(String.valueOf(user.get("id")));
+            condition.setPageNo(pageNo);
 
-        // 以JSON格式返回
-        return this.getData((List<Map<String, Object>>) page.getResult(), List.class);
+            // 订单信息页对象
+            page = orderService.findClientOrderWithPage(condition);
+        }
+
+        // 以统一数据格式返回
+        return this.getReturnData(page.getResult());
     }
 
     /**
@@ -220,7 +241,7 @@ public class OrderWebService {
         String[] data = null;
         Map<String, Object> result = ccp.sendTemplateSMS(mobile, templateId, data);
 
-        // 以JSON格式返回
-        return this.getData(result, Map.class);
+        // 以统一数据格式返回
+        return this.getReturnData(result);
     }
 }

@@ -3,6 +3,7 @@ package sh.ricky.dyx.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,27 +77,63 @@ public class OrderService {
     }
 
     /**
-     * 根据订单号查询消费者订单详情
+     * 根据订单号查询客户端订单详情
      * 
      * @param orderNo
      * @return
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public Map<String, Object> getConsumerOrderDetail(String orderNo) {
-        Map<String, Object> result = orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
+    public Map<String, Object> getClientOrderDetail(String orderNo) {
+        Map<String, Object> result = new HashMap<String, Object>();
 
-        if (result == null || result.isEmpty()) {
-            return null;
+        Map<String, Object> result1 = orderJdbcDAO.getOrderInstInfo(orderNo);
+
+        if (result1 != null && !result1.isEmpty()) {
+            result.putAll(result1);
         }
 
-        Map<String, Object> result2 = orderJdbcDAO.getConsumerOrderAuthInfo(orderNo);
+        Map<String, Object> result2 = orderJdbcDAO.getOrderAuthInfo(orderNo);
         if (result2 != null && !result2.isEmpty()) {
             result.put("stat", result2.get("audt_stat"));
         }
 
-        List<Map<String, Object>> result3 = orderJdbcDAO.getConsumerOrderGoodsInfo(orderNo);
+        List<Map<String, Object>> result3 = orderJdbcDAO.getOrderGoodsInfo(orderNo);
         if (result3 != null && !result3.isEmpty()) {
-            result.put("goods", result3);
+            result.putAll(result3.get(0));
+        }
+
+        Map<String, Object> result4 = orderJdbcDAO.getOrderRecvInfo(orderNo);
+        if (result4 != null && !result4.isEmpty()) {
+            result.putAll(result4);
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据订单号查询订单详情
+     * 
+     * @param orderNo
+     * @return
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public Map<String, Object> getOrderDetail(String orderNo) {
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        Map<String, Object> result1 = orderJdbcDAO.getOrderInstInfo(orderNo);
+
+        if (result1 != null && !result1.isEmpty()) {
+            result.putAll(result1);
+        }
+
+        List<Map<String, Object>> result2 = orderJdbcDAO.getOrderGoodsDetail(orderNo);
+        if (result2 != null && !result2.isEmpty()) {
+            result.putAll(result2.get(0));
+        }
+
+        Map<String, Object> result3 = orderJdbcDAO.getOrderAplInfo(orderNo);
+        if (result3 != null && !result3.isEmpty()) {
+            result.putAll(result3);
         }
 
         return result;
@@ -109,19 +146,25 @@ public class OrderService {
      * @return
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public Map<String, Object> getConsumerOrderAppInfo(String orderNo) {
-        return orderJdbcDAO.getConsumerOrderAppInfo(orderNo);
-    }
+    public Map<String, Object> getOrderAppInfo(String orderNo) {
+        Map<String, Object> result = new HashMap<String, Object>();
 
-    /**
-     * 根据订单号查询订单商品信息
-     * 
-     * @param orderNo
-     * @return
-     */
-    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public List<Map<String, Object>> getConsumerOrderGoodsInfo(String orderNo) {
-        return orderJdbcDAO.getConsumerOrderGoodsInfo(orderNo);
+        Map<String, Object> result1 = orderJdbcDAO.getOrderRecvInfo(orderNo);
+        if (result1 != null && !result1.isEmpty()) {
+            result.put("ordDate", result1.get("ord_date"));
+            result.put("rec", result1.get("recv_name"));
+            result.put("recTel", result1.get("mobile"));
+        }
+
+        Map<String, Object> result2 = orderJdbcDAO.getOrderShopInfo(orderNo);
+        if (result2 != null && !result2.isEmpty()) {
+            result.put("shopName", result2.get("name"));
+            result.put("shopNo", result2.get("code"));
+            result.put("shopAddr", result2.get("address"));
+            result.put("shopRegion", result2.get("region_code"));
+        }
+
+        return result;
     }
 
     /**
@@ -185,14 +228,14 @@ public class OrderService {
     }
 
     /**
-     * 根据条件查询消费者订单页对象
+     * 根据条件查询客户端订单页对象
      * 
      * @param condition
      * @return
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public Page findConsumerOrderWithPage(OrderQueryCondition condition) {
-        return orderJdbcDAO.findConsumerOrderWithPage(condition, false);
+    public Page findClientOrderWithPage(OrderQueryCondition condition) {
+        return orderJdbcDAO.findOrderWithPage(condition, false);
     }
 
     /**
