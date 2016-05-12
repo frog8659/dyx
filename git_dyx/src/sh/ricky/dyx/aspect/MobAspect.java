@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import sh.ricky.core.aspect.BaseAspect;
@@ -51,7 +53,7 @@ public class MobAspect extends BaseAspect {
         }
 
         if (request == null) {
-            return null;
+            return error;
         }
 
         String userName = request.getParameter("userName");
@@ -63,5 +65,32 @@ public class MobAspect extends BaseAspect {
         UserInfo user = userService.getUserInfo(userName, userPwd);
 
         return user == null ? error : point.proceed();
+    }
+
+    /**
+     * 设置返回状态
+     * 
+     * @param arg
+     * @throws Throwable
+     */
+    @SuppressWarnings("unchecked")
+    @AfterReturning(pointcut = "mob()", returning = "arg")
+    public void setReturnStat(Object arg) throws Throwable {
+        Map<String, Object> map = null;
+
+        if (arg instanceof Map) {
+            map = (Map<String, Object>) arg;
+        } else if (arg instanceof ResponseEntity) {
+            map = ((ResponseEntity<Map<String, Object>>) arg).getBody();
+        }
+
+        if (map != null) {
+            if (map.containsKey("error")) {
+                map.put("status", GlobalConstants.NO_VALUE);
+            }
+            if (!map.containsKey("status")) {
+                map.put("status", GlobalConstants.YES_VALUE);
+            }
+        }
     }
 }
