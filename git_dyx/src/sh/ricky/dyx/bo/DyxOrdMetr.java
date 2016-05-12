@@ -164,6 +164,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.metrNo = metrNo;
     }
 
+    @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "METR_DATE", unique = false, nullable = true, insertable = true, updatable = true)
     public Date getMetrDate() {
@@ -174,6 +175,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.metrDate = metrDate;
     }
 
+    @Transient
     @Column(name = "INST_ORG", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getInstOrg() {
         return instOrg;
@@ -183,6 +185,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instOrg = instOrg;
     }
 
+    @Transient
     @Column(name = "INST_NAME", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getInstName() {
         return instName;
@@ -192,6 +195,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instName = instName;
     }
 
+    @Transient
     @Column(name = "INST_PERIOD", unique = false, nullable = true, insertable = true, updatable = true, length = 5)
     public String getInstPeriod() {
         return instPeriod;
@@ -201,6 +205,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instPeriod = instPeriod;
     }
 
+    @Transient
     @Column(name = "INST_AMT", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstAmt() {
         return instAmt;
@@ -210,6 +215,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instAmt = instAmt;
     }
 
+    @Transient
     @Column(name = "INST_OOP_AMT", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstOopAmt() {
         return instOopAmt;
@@ -219,6 +225,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instOopAmt = instOopAmt;
     }
 
+    @Transient
     @Column(name = "INST_MON_INTR_RATE", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstMonIntrRate() {
         return instMonIntrRate;
@@ -228,6 +235,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instMonIntrRate = instMonIntrRate;
     }
 
+    @Transient
     @Column(name = "INST_MON_SERV_RATE", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstMonServRate() {
         return instMonServRate;
@@ -237,6 +245,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instMonServRate = instMonServRate;
     }
 
+    @Transient
     @Column(name = "INST_PREM_RATE", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstPermRate() {
         return instPermRate;
@@ -246,6 +255,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instPermRate = instPermRate;
     }
 
+    @Transient
     @Column(name = "INST_REP_AMT", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getInstRepAmt() {
         return instRepAmt;
@@ -255,6 +265,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instRepAmt = instRepAmt;
     }
 
+    @Transient
     @Column(name = "INST_REP_DATE", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getInstRepDate() {
         return instRepDate;
@@ -264,6 +275,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.instRepDate = instRepDate;
     }
 
+    @Transient
     @Column(name = "APL", unique = false, nullable = true, insertable = true, updatable = true, length = 50)
     public String getApl() {
         return apl;
@@ -282,6 +294,7 @@ public class DyxOrdMetr implements java.io.Serializable {
         this.aplName = aplName;
     }
 
+    @Transient
     @Column(name = "APL_TEL", unique = false, nullable = true, insertable = true, updatable = true, length = 30)
     public String getAplTel() {
         return aplTel;
@@ -565,7 +578,7 @@ public class DyxOrdMetr implements java.io.Serializable {
 
     @Transient
     public Map<String, Map<String, DyxOrdMetrAttach>> getDyxOrdMetrAttachMap() {
-        if (dyxOrdMetrAttachSet == null) {
+        if (dyxOrdMetrAttachSet == null || dyxOrdMetrAttachSet.isEmpty()) {
             return null;
         }
 
@@ -599,7 +612,7 @@ public class DyxOrdMetr implements java.io.Serializable {
 
     @Transient
     public Map<String, DyxOrdMetrContact> getDyxOrdMetrContactMap() {
-        if (dyxOrdMetrContactSet == null) {
+        if (dyxOrdMetrContactSet == null || dyxOrdMetrContactSet.isEmpty()) {
             return null;
         }
 

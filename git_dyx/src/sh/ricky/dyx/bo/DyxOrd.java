@@ -142,6 +142,7 @@ public class DyxOrd implements java.io.Serializable {
         this.ordDate = ordDate;
     }
 
+    @Transient
     @Column(name = "ORD_AMT", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getOrdAmt() {
         return ordAmt;
@@ -250,6 +251,7 @@ public class DyxOrd implements java.io.Serializable {
         this.shopAddr = shopAddr;
     }
 
+    @Transient
     @Column(name = "PRD_NAME", unique = false, nullable = true, insertable = true, updatable = true, length = 100)
     public String getPrdName() {
         return prdName;
@@ -259,6 +261,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdName = prdName;
     }
 
+    @Transient
     @Column(name = "PRD_BRAND", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getPrdBrand() {
         return prdBrand;
@@ -268,6 +271,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdBrand = prdBrand;
     }
 
+    @Transient
     @Column(name = "PRD_TYPE", unique = false, nullable = true, insertable = true, updatable = true, length = 10)
     public String getPrdType() {
         return prdType;
@@ -277,6 +281,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdType = prdType;
     }
 
+    @Transient
     @Column(name = "PRD_SPEC", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getPrdSpec() {
         return prdSpec;
@@ -286,6 +291,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdSpec = prdSpec;
     }
 
+    @Transient
     @Column(name = "PRD_COLOR", unique = false, nullable = true, insertable = true, updatable = true, length = 20)
     public String getPrdColor() {
         return prdColor;
@@ -295,6 +301,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdColor = prdColor;
     }
 
+    @Transient
     @Column(name = "PRD_COUNT", unique = false, nullable = true, insertable = true, updatable = true)
     public Integer getPrdCount() {
         return prdCount;
@@ -304,6 +311,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdCount = prdCount;
     }
 
+    @Transient
     @Column(name = "PRD_ORI_PRIC", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getPrdOriPric() {
         return prdOriPric;
@@ -313,6 +321,7 @@ public class DyxOrd implements java.io.Serializable {
         this.prdOriPric = prdOriPric;
     }
 
+    @Transient
     @Column(name = "PRD_CUR_PRIC", unique = false, nullable = true, insertable = true, updatable = true)
     public BigDecimal getPrdCurPric() {
         return prdCurPric;
@@ -404,7 +413,7 @@ public class DyxOrd implements java.io.Serializable {
 
     @Transient
     public Map<String, DyxOrdEval> getDyxOrdEvalMap() {
-        if (dyxOrdEvalSet == null) {
+        if (dyxOrdEvalSet == null || dyxOrdEvalSet.isEmpty()) {
             return null;
         }
 
