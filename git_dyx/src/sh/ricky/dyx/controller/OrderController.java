@@ -4,6 +4,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ import sh.ricky.dyx.annotation.Permission;
 import sh.ricky.dyx.bean.CfgFlow;
 import sh.ricky.dyx.bean.OrderQueryCondition;
 import sh.ricky.dyx.bo.DyxOrd;
+import sh.ricky.dyx.bo.DyxOrdMetr;
 import sh.ricky.dyx.bo.DyxOrdMetrAttach;
 import sh.ricky.dyx.constant.FlowConstants;
 import sh.ricky.dyx.constant.OrderConstants;
@@ -90,6 +92,31 @@ public class OrderController extends BaseBinder {
         DyxOrd ord = orderService.getOrd(id, 1);
 
         if (ord != null) {
+            Map<String, Object> detail = orderService.getOrderDetail(ord.getOrdNo());
+            if (detail != null && !detail.isEmpty()) {
+                ord.setPrdName((String) detail.get("fullname"));
+                ord.setPrdBrand((String) detail.get("brand"));
+                ord.setPrdType((String) detail.get("category"));
+                ord.setPrdSpec((String) detail.get("configuration"));
+                ord.setPrdColor((String) detail.get("color_name"));
+                ord.setPrdCount((Integer) detail.get("number"));
+                ord.setPrdOriPric((BigDecimal) detail.get("original_price"));
+                ord.setPrdCurPric((BigDecimal) detail.get("current_price"));
+                ord.setOrdAmt((BigDecimal) detail.get("in_price"));
+
+                DyxOrdMetr metr = ord.getDyxOrdMetr();
+                if (metr == null) {
+                    metr = new DyxOrdMetr();
+                    ord.setDyxOrdMetr(metr);
+                }
+                metr.setInstName((String) detail.get("inst_name"));
+                metr.setInstPeriod((String) detail.get("inst_period"));
+                metr.setInstMonIntrRate((BigDecimal) detail.get("inst_mon_rate"));
+                metr.setMetrDate((Date) detail.get("sys_time"));
+                metr.setApl((String) detail.get("consumer"));
+                metr.setAplTel((String) detail.get("telephone"));
+            }
+
             // 设置流程状态
             CfgFlow condition = new CfgFlow();
             condition.setFlowSeg(ord.getAudtStat());
