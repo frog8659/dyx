@@ -99,6 +99,11 @@ public class UserService {
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public Map<String, Object> getShopUser(String userName, String userPwd) {
+        // 登录用户名密码不能为空
+        if (StringUtils.isBlank(userName) || StringUtils.isBlank(userPwd)) {
+            return null;
+        }
+
         UserQueryCondition condition = new UserQueryCondition();
         condition.setUserName(userName);
         condition.setUserPwd(MD5Util.getMD5(userPwd).toLowerCase());

@@ -160,6 +160,11 @@
 			var cont = $.trim(label.text());
 			label.nextAll("[name$='evalCont']").val(cont);
 		});
+		
+		<%-- 无流程操作时，禁用选择 --%>
+		<c:if test="${empty flowList}">
+			$("#evalTb :radio").attr("disabled", "disabled");
+		</c:if>
 	})
 	
 	<%-- 计算“月还款达月收入水平” --%>
