@@ -499,20 +499,36 @@
 	
 	<%-- 更新资料 --%>
 	function updateMetr(v) {
-		<%-- 更新评审结果 --%>
 		var metr = $("[metr]:visible").first().attr("metr");
-		var audt = $("#tabAudt").val();
-		$("#tabAudt").val(audt.substring(0, metr - 1) + v + audt.substring(metr, audt.length));
+		
+		<%-- 更新评审结果 --%>
+		var _updateAudt = function() {
+			var audt = $("#tabAudt").val();
+			$("#tabAudt").val(audt.substring(0, metr - 1) + v + audt.substring(metr, audt.length));
+		};
 
 		if(v == 1) {
-			<%-- 保存资料信息 --%>
-			ajaxSubmit(function() {
-				<%-- 更新页面展示 --%>
-				updateDisp(metr, v);
+			<%-- 提交前先校验表单 --%>
+			var form = $("#ordForm");
+			var others = $("#tabAudt, #evalTb :input");
+			<%-- 仅校验当前标签页 --%>
+			others.addClass("ignore");
+			validateForm(form, function(result) {
+				<%-- 恢复所有校验内容 --%>
+				others.removeClass("ignore");
+				<%-- 更新评审结果 --%>
+				_updateAudt();
+				<%-- 保存资料信息 --%>
+				ajaxSubmit(function() {
+					<%-- 更新页面展示 --%>
+					updateDisp(metr, v);
+				});
 			});
 		} else {
 			<%-- 更新页面展示 --%>
 			updateDisp(metr, v);
+			<%-- 更新评审结果 --%>
+			_updateAudt();
 		}
 	}
 	
@@ -623,58 +639,63 @@
 
 	<%-- ajax提交表单 --%>
 	function ajaxSubmit(callback) {
-		var form = $("#ordForm");
-		var others = $("#tabAudt, #evalTb :input");
-		<%-- 仅校验当前标签页 --%>
-		others.addClass("ignore");
-		validateForm(form, function(result) {
-			<%-- 恢复所有校验内容 --%>
-			others.removeClass("ignore");
-			<%-- 校验通过则执行提交操作 --%>
-			if(result) {
-				form.unbind("submit").submit(function() {
-					$(this).ajaxSubmit({
-						url: "${base}ord/audit/upd",
-						success: function(data) {
-							if(typeof data.error != "undefined") {
-								alert(data.error);
-								return false;
-							}
-							
-							<%-- 更新表单数据 --%>
-							
-							var ord = data.ord || {};
-							var metr = ord.dyxOrdMetr || {}; 
-
-							$("#token").val(ord.token);
-							
-							var map = ord.dyxOrdEvalMap;
-							if(typeof map != "undefined") {
-								for(var i in map) {
-									$("[rel='" + i + "']").val(map[i].evalId);
-								}
-							}
-							
-							map = metr.dyxOrdMetrContactMap;
-							if(typeof map != "undefined") {
-								for(var i in map) {
-									$("[name='contact[" + (Number(i) - 1) + "].contId']").val(map[i].contId);
-								}
-							}
-
-							<%-- 执行回调函数 --%>
-							if(typeof callback == "function") {
-								callback();
-							}
-						},
-						error: function() {
-							alert("网络异常，数据提交失败！");
+		$("#ordForm").unbind("submit").submit(function() {
+			$(this).ajaxSubmit({
+				url: "${base}ord/audit/upd",
+				beforeSubmit: function(arr) {
+					<%-- 本次需提交的表单数据 --%>
+					var data = new Array();
+					for(var i in arr) {
+						var obj = $("[name='" + arr[i].name + "']");
+						if(!obj.is(".info :hidden") && obj.parents("#evalTb").size() == 0) {
+							data.push(arr[i]);
 						}
-					});
-					return false;
-				}).submit();
-			}
-		});
+					}
+					<%-- 清空默认数据 --%>
+					arr.length = 0;
+					<%-- 设置需提交的表单数据 --%>
+					for(var i in data) {
+						arr.push(data[i]);
+					}
+				},
+				success: function(data) {
+					if(typeof data.error != "undefined") {
+						alert(data.error);
+						return false;
+					}
+					
+					<%-- 更新表单数据 --%>
+					
+					var ord = data.ord || {};
+					var metr = ord.dyxOrdMetr || {}; 
+
+					$("#token").val(ord.token);
+					
+					var map = ord.dyxOrdEvalMap;
+					if(typeof map != "undefined") {
+						for(var i in map) {
+							$("[rel='" + i + "']").val(map[i].evalId);
+						}
+					}
+					
+					map = metr.dyxOrdMetrContactMap;
+					if(typeof map != "undefined") {
+						for(var i in map) {
+							$("[name='contact[" + (Number(i) - 1) + "].contId']").val(map[i].contId);
+						}
+					}
+
+					<%-- 执行回调函数 --%>
+					if(typeof callback == "function") {
+						callback();
+					}
+				},
+				error: function() {
+					alert("网络异常，数据提交失败！");
+				}
+			});
+			return false;
+		}).submit();
 	}
 
 	<%-- 添加紧急联系人 --%>

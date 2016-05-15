@@ -1,6 +1,5 @@
 package sh.ricky.dyx.form;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -25,11 +24,11 @@ public class OrderForm {
 
     private DyxOrdMetr metr = new DyxOrdMetr();
 
-    private List<DyxOrdMetrContact> contact = new ArrayList<DyxOrdMetrContact>();
+    private List<DyxOrdMetrContact> contact;
 
-    private List<DyxOrdMetrAttach> attach = new ArrayList<DyxOrdMetrAttach>();
+    private List<DyxOrdMetrAttach> attach;
 
-    private List<DyxOrdEval> eval = new ArrayList<DyxOrdEval>();
+    private List<DyxOrdEval> eval;
 
     private CfgFlow flow = new CfgFlow();
 
@@ -54,28 +53,34 @@ public class OrderForm {
             FormUtil.copyProperties(dyxOrd.getDyxOrdMetr(), this.metr);
         }
 
-        if (dyxOrd.getDyxOrdMetr().getDyxOrdMetrContactSet() == null) {
-            Set<DyxOrdMetrContact> dyxOrdMetrContactSet = new LinkedHashSet<DyxOrdMetrContact>();
-            dyxOrdMetrContactSet.addAll(this.contact);
-            dyxOrd.getDyxOrdMetr().setDyxOrdMetrContactSet(dyxOrdMetrContactSet);
-        } else {
-            FormUtil.updateSet(dyxOrd.getDyxOrdMetr().getDyxOrdMetrContactSet(), this.contact);
+        if (this.contact != null) {
+            if (dyxOrd.getDyxOrdMetr().getDyxOrdMetrContactSet() == null) {
+                Set<DyxOrdMetrContact> dyxOrdMetrContactSet = new LinkedHashSet<DyxOrdMetrContact>();
+                dyxOrdMetrContactSet.addAll(this.contact);
+                dyxOrd.getDyxOrdMetr().setDyxOrdMetrContactSet(dyxOrdMetrContactSet);
+            } else {
+                FormUtil.updateSet(dyxOrd.getDyxOrdMetr().getDyxOrdMetrContactSet(), this.contact);
+            }
         }
 
-        if (dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet() == null) {
-            Set<DyxOrdMetrAttach> dyxOrdMetrAttachSet = new LinkedHashSet<DyxOrdMetrAttach>();
-            dyxOrdMetrAttachSet.addAll(this.attach);
-            dyxOrd.getDyxOrdMetr().setDyxOrdMetrAttachSet(dyxOrdMetrAttachSet);
-        } else {
-            FormUtil.updateSet(dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet(), this.attach);
+        if (this.attach != null) {
+            if (dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet() == null) {
+                Set<DyxOrdMetrAttach> dyxOrdMetrAttachSet = new LinkedHashSet<DyxOrdMetrAttach>();
+                dyxOrdMetrAttachSet.addAll(this.attach);
+                dyxOrd.getDyxOrdMetr().setDyxOrdMetrAttachSet(dyxOrdMetrAttachSet);
+            } else {
+                FormUtil.updateSet(dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet(), this.attach);
+            }
         }
 
-        if (dyxOrd.getDyxOrdEvalSet() == null) {
-            Set<DyxOrdEval> dyxOrdEvalSet = new LinkedHashSet<DyxOrdEval>();
-            dyxOrdEvalSet.addAll(this.eval);
-            dyxOrd.setDyxOrdEvalSet(dyxOrdEvalSet);
-        } else {
-            FormUtil.updateSet(dyxOrd.getDyxOrdEvalSet(), this.eval);
+        if (this.eval != null) {
+            if (dyxOrd.getDyxOrdEvalSet() == null) {
+                Set<DyxOrdEval> dyxOrdEvalSet = new LinkedHashSet<DyxOrdEval>();
+                dyxOrdEvalSet.addAll(this.eval);
+                dyxOrd.setDyxOrdEvalSet(dyxOrdEvalSet);
+            } else {
+                FormUtil.updateSet(dyxOrd.getDyxOrdEvalSet(), this.eval);
+            }
         }
 
         // 批量设置分期订单主键
@@ -121,6 +126,14 @@ public class OrderForm {
         this.attach = attach;
     }
 
+    public List<DyxOrdEval> getEval() {
+        return eval;
+    }
+
+    public void setEval(List<DyxOrdEval> eval) {
+        this.eval = eval;
+    }
+
     public CfgFlow getFlow() {
         return flow;
     }
@@ -144,13 +157,4 @@ public class OrderForm {
     public void setMemo(String memo) {
         this.memo = memo;
     }
-
-    public List<DyxOrdEval> getEval() {
-        return eval;
-    }
-
-    public void setEval(List<DyxOrdEval> eval) {
-        this.eval = eval;
-    }
-
 }
