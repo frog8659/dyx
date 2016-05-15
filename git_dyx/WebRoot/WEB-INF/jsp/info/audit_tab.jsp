@@ -616,53 +616,65 @@
 		}
 		
 		tab.find(":input").val("");
+		tab.find("#metrNo, #aplJobIncome, .prov").change();
 		tab.find("img").hide().removeAttr("src");
 		tab.find("strong").show();
 	}
 
 	<%-- ajax提交表单 --%>
 	function ajaxSubmit(callback) {
-		$("#ordForm").unbind("submit").submit(function() {
-			$(this).ajaxSubmit({
-				url: "${base}ord/audit/upd",
-				success: function(data) {
-					if(typeof data.error != "undefined") {
-						alert(data.error);
-						return false;
-					}
-					
-					<%-- 更新表单数据 --%>
-					
-					var ord = data.ord || {};
-					var metr = ord.dyxOrdMetr || {}; 
+		var form = $("#ordForm");
+		var others = $("#tabAudt, #evalTb :input");
+		<%-- 仅校验当前标签页 --%>
+		others.addClass("ignore");
+		validateForm(form, function(result) {
+			<%-- 恢复所有校验内容 --%>
+			others.removeClass("ignore");
+			<%-- 校验通过则执行提交操作 --%>
+			if(result) {
+				form.unbind("submit").submit(function() {
+					$(this).ajaxSubmit({
+						url: "${base}ord/audit/upd",
+						success: function(data) {
+							if(typeof data.error != "undefined") {
+								alert(data.error);
+								return false;
+							}
+							
+							<%-- 更新表单数据 --%>
+							
+							var ord = data.ord || {};
+							var metr = ord.dyxOrdMetr || {}; 
 
-					$("#token").val(ord.token);
-					
-					var map = ord.dyxOrdEvalMap;
-					if(typeof map != "undefined") {
-						for(var i in map) {
-							$("[rel='" + i + "']").val(map[i].evalId);
-						}
-					}
-					
-					map = metr.dyxOrdMetrContactMap;
-					if(typeof map != "undefined") {
-						for(var i in map) {
-							$("[name='contact[" + (Number(i) - 1) + "].contId']").val(map[i].contId);
-						}
-					}
+							$("#token").val(ord.token);
+							
+							var map = ord.dyxOrdEvalMap;
+							if(typeof map != "undefined") {
+								for(var i in map) {
+									$("[rel='" + i + "']").val(map[i].evalId);
+								}
+							}
+							
+							map = metr.dyxOrdMetrContactMap;
+							if(typeof map != "undefined") {
+								for(var i in map) {
+									$("[name='contact[" + (Number(i) - 1) + "].contId']").val(map[i].contId);
+								}
+							}
 
-					<%-- 执行回调函数 --%>
-					if(typeof callback == "function") {
-						callback();
-					}
-				},
-				error: function() {
-					alert("网络异常，数据提交失败！");
-				}
-			});
-			return false;
-		}).submit();
+							<%-- 执行回调函数 --%>
+							if(typeof callback == "function") {
+								callback();
+							}
+						},
+						error: function() {
+							alert("网络异常，数据提交失败！");
+						}
+					});
+					return false;
+				}).submit();
+			}
+		});
 	}
 
 	<%-- 添加紧急联系人 --%>
