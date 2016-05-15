@@ -42,24 +42,24 @@
 				<tbody>
 					<tr>
 						<th width="30%">分期申请书编号：</th>
-						<td><input type="text" name="metr.metrNo" id="metrNo" value="${fn:trim(metr.metrNo)}" class="inp" /></td>
+						<td><input type="text" name="metr.metrNo" id="metrNo" value="${fn:trim(metr.metrNo)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>姓名：</th>
-						<td><input type="text" name="metr.aplName" value="${fn:trim(metr.aplName)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplName" value="${fn:trim(metr.aplName)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>身份证号：</th>
-						<td><input type="text" name="metr.aplIdc" value="${fn:trim(metr.aplIdc)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplIdc" value="${fn:trim(metr.aplIdc)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>手机号码：</th>
-						<td><input type="text" name="metr.aplMob" value="${fn:trim(metr.aplMob)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplMob" value="${fn:trim(metr.aplMob)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>发卡银行：</th>
 						<td>
-							<select name="metr.aplBank">
+							<select name="metr.aplBank" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicBank}">
 									<option value="${dic.key}" ${dic.key eq metr.aplBank ? "selected" : ""}>${dic.value}</option>
@@ -69,19 +69,19 @@
 					</tr>
 					<tr>
 						<th>银行卡号：</th>
-						<td><input type="text" name="metr.aplBankCard" value="${fn:trim(metr.aplBankCard)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplBankCard" value="${fn:trim(metr.aplBankCard)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>银行预留手机号：</th>
-						<td><input type="text" name="metr.aplBankMob" value="${fn:trim(metr.aplBankMob)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplBankMob" value="${fn:trim(metr.aplBankMob)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>身份证有效期：</th>
-						<td><input type="text" name="metr.aplIdcExp" value="<fmt:formatDate value='${metr.aplIdcExp}' pattern='yyyy-MM-dd' />" class="inp Wdate" /></td>
+						<td><input type="text" name="metr.aplIdcExp" value="<fmt:formatDate value='${metr.aplIdcExp}' pattern='yyyy-MM-dd' />" class="inp Wdate important" /></td>
 					</tr>
 					<tr>
 						<th>年龄：</th>
-						<td><input type="text" name="metr.aplAge" value="${fn:trim(metr.aplAge)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplAge" value="${fn:trim(metr.aplAge)}" class="inp important" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -92,7 +92,7 @@
 					<tr>
 						<th width="30%">性别：</th>
 						<td>
-							<select name="metr.aplSex">
+							<select name="metr.aplSex" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicSex}">
 									<option value="${dic.key}" ${dic.key eq metr.aplSex ? "selected" : ""}>${dic.value}</option>
@@ -103,7 +103,7 @@
 					<tr>
 						<th>教育程度：</th>
 						<td>
-							<select name="metr.aplEdu">
+							<select name="metr.aplEdu" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicEdu}">
 									<option value="${dic.key}" ${dic.key eq metr.aplEdu ? "selected" : ""}>${dic.value}</option>
@@ -114,7 +114,7 @@
 					<tr>
 						<th>婚姻状态：</th>
 						<td>
-							<select name="metr.aplMari">
+							<select name="metr.aplMari" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicMari}">
 									<option value="${dic.key}" ${dic.key eq metr.aplMari ? "selected" : ""}>${dic.value}</option>
@@ -128,17 +128,18 @@
 							<select name="metr.aplProv" class="prov" data-first-title="-省-" data-first-value="" data-value="${metr.aplProv}"></select>
 							<select name="metr.aplCity" class="city" data-first-title="-市-" data-first-value="" data-value="${metr.aplCity}"></select>
 							<select name="metr.aplDist" class="dist" data-first-title="-县/区-" data-first-value="" data-value="${metr.aplDist}"></select>
+							<input type="hidden" class="important" />
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="text" name="metr.aplAddr" value="${fn:trim(metr.aplAddr)}" class="inp" />
+							<input type="text" name="metr.aplAddr" value="${fn:trim(metr.aplAddr)}" class="inp important" />
 						</td>
 					</tr>
 					<tr>
 						<th>现居住宅状况：</th>
 						<td>
-							<select name="metr.aplHomeStat">
+							<select name="metr.aplHomeStat" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicHomeStat}">
 									<option value="${dic.key}" ${dic.key eq metr.aplHomeStat ? "selected" : ""}>${dic.value}</option>
@@ -148,15 +149,15 @@
 					</tr>
 					<tr>
 						<th>本地居住年限：</th>
-						<td><input type="text" name="metr.aplResdPeriod" value="${fn:trim(metr.aplResdPeriod)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplResdPeriod" value="${fn:trim(metr.aplResdPeriod)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>电子邮箱：</th>
-						<td><input type="text" name="metr.aplMail" value="${fn:trim(metr.aplMail)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplMail" value="${fn:trim(metr.aplMail)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>固定电话：</th>
-						<td><input type="text" name="metr.aplTel" value="${fn:trim(metr.aplTel)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplTel" value="${fn:trim(metr.aplTel)}" class="inp important" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -167,7 +168,7 @@
 					<tr>
 						<th width="30%">受雇类型：</th>
 						<td>
-							<select name="metr.aplEmpType">
+							<select name="metr.aplEmpType" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicEmpType}">
 									<option value="${dic.key}" ${dic.key eq metr.aplEmpType ? "selected" : ""}>${dic.value}</option>
@@ -177,12 +178,12 @@
 					</tr>
 					<tr>
 						<th>现单位名称：</th>
-						<td><input type="text" name="metr.aplCompany" value="${fn:trim(metr.aplCompany)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplCompany" value="${fn:trim(metr.aplCompany)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>单位性质：</th>
 						<td>
-							<select name="metr.aplCompNatu">
+							<select name="metr.aplCompNatu" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicCompNatu}">
 									<option value="${dic.key}" ${dic.key eq metr.aplCompNatu ? "selected" : ""}>${dic.value}</option>
@@ -193,7 +194,7 @@
 					<tr>
 						<th>职务级别：</th>
 						<td>
-							<select name="metr.aplJobTitle">
+							<select name="metr.aplJobTitle" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicJobTitle}">
 									<option value="${dic.key}" ${dic.key eq metr.aplJobTitle ? "selected" : ""}>${dic.value}</option>
@@ -203,24 +204,24 @@
 					</tr>
 					<tr>
 						<th>税后月收入：</th>
-						<td><input type="text" name="metr.aplJobIncome" id="aplJobIncome" value="${metr.aplJobIncome}" class="inp" /></td>
+						<td><input type="text" name="metr.aplJobIncome" id="aplJobIncome" value="${metr.aplJobIncome}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>现单位工作年限：</th>
-						<td><input type="text" name="metr.aplJobYear" value="${fn:trim(metr.aplJobYear)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplJobYear" value="${fn:trim(metr.aplJobYear)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>单位电话：</th>
-						<td><input type="text" name="metr.aplCompTel" value="${fn:trim(metr.aplCompTel)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplCompTel" value="${fn:trim(metr.aplCompTel)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>单位地址：</th>
-						<td><input type="text" name="metr.aplCompAddr" value="${fn:trim(metr.aplCompAddr)}" class="inp" /></td>
+						<td><input type="text" name="metr.aplCompAddr" value="${fn:trim(metr.aplCompAddr)}" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>工作性质：</th>
 						<td>
-							<select name="metr.aplJobSpec">
+							<select name="metr.aplJobSpec" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicJobSpec}">
 									<option value="${dic.key}" ${dic.key eq metr.aplJobSpec ? "selected" : ""}>${dic.value}</option>
@@ -231,7 +232,7 @@
 					<tr>
 						<th>单位规模：</th>
 						<td>
-							<select name="metr.aplCompSize">
+							<select name="metr.aplCompSize" class="important">
 								<option value="">--</option>
 								<c:forEach var="dic" items="${dicCompSize}">
 									<option value="${dic.key}" ${dic.key eq metr.aplCompSize ? "selected" : ""}>${dic.value}</option>
@@ -510,19 +511,22 @@
 		if(v == 1) {
 			<%-- 提交前先校验表单 --%>
 			var form = $("#ordForm");
-			var others = $("#tabAudt, #evalTb :input");
+			var ignore = $(".info").filter(":hidden").find(":input").add($("#tabAudt, #evalTb :input"));
 			<%-- 仅校验当前标签页 --%>
-			others.addClass("ignore");
+			ignore.addClass("ignore");
 			validateForm(form, function(result) {
 				<%-- 恢复所有校验内容 --%>
-				others.removeClass("ignore");
-				<%-- 更新评审结果 --%>
-				_updateAudt();
-				<%-- 保存资料信息 --%>
-				ajaxSubmit(function() {
-					<%-- 更新页面展示 --%>
-					updateDisp(metr, v);
-				});
+				ignore.removeClass("ignore");
+				<%-- 校验通过则执行操作 --%>
+				if(result) {
+					<%-- 更新评审结果 --%>
+					_updateAudt();
+					<%-- 保存资料信息 --%>
+					ajaxSubmit(function() {
+						<%-- 更新页面展示 --%>
+						updateDisp(metr, v);
+					});
+				}
 			});
 		} else {
 			<%-- 更新页面展示 --%>

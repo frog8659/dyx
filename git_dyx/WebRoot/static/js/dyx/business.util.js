@@ -79,7 +79,7 @@ function toggleEditable(expr, editable) {
 	
 	if(editable) { // 允许编辑
 		// 添加校验标记
-		_toggleMarker("star");
+		_toggleMarker("star-outer-aft");
 		
 		all.each(function() {
 			_toggleWrapper(this, editable);
@@ -92,7 +92,7 @@ function toggleEditable(expr, editable) {
 		other.show();
 	} else { // 禁用编辑
 		// 清除校验标记
-		_toggleMarker("clear");
+		_toggleMarker("clear-outer-aft");
 		
 		text.each(function() {
 			_toggleWrapper(this, editable, $(this).val());

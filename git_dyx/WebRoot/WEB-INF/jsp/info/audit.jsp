@@ -138,6 +138,11 @@
 </form>
 
 <script type="text/javascript">
+	$(function() {
+		<%-- 初始化必输项样式 --%>
+		validateMark(".important", "star-outer-aft");
+	});
+	
 	<%-- 提交表单 --%>
 	function formSubmit() {
 		$("#ordForm").unbind("submit").submit();
