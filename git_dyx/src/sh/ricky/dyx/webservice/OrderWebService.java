@@ -24,6 +24,7 @@ import sh.ricky.core.util.CascadeUtil;
 import sh.ricky.dyx.bean.OrderQueryCondition;
 import sh.ricky.dyx.bo.DyxOrd;
 import sh.ricky.dyx.constant.FlowConstants;
+import sh.ricky.dyx.constant.OrderConstants;
 import sh.ricky.dyx.form.OrderForm;
 import sh.ricky.dyx.service.OrderService;
 import sh.ricky.dyx.util.SysUtil;
@@ -122,7 +123,12 @@ public class OrderWebService {
         DyxOrd ord = orderService.getOrdByNo(form.getOrd().getOrdNo());
         if (ord == null) {
             ord = new DyxOrd();
-            ord.setAudtStat(FlowConstants.FLOW_SEG_DCS);
+            String ordType = form.getOrd().getOrdType();
+            if (OrderConstants.ORD_TYPE_ZZBL.equals(ordType)) {
+                ord.setAudtStat(FlowConstants.FLOW_SEG_DCS);
+            } else if (OrderConstants.ORD_TYPE_KFDB.equals(ordType)) {
+                ord.setAudtStat(FlowConstants.FLOW_SEG_KFDTX);
+            }
         } else {
             ord.setAudtStat(FlowConstants.FLOW_SEG_ZLYXG);
         }

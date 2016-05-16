@@ -10,6 +10,9 @@ public class FlowConstants {
 
     /** ************************************************************************ */
 
+    /** 流程环节：客服待填写 */
+    public static final String FLOW_SEG_KFDTX = "0001";
+
     /** 流程环节：待初审 */
     public static final String FLOW_SEG_DCS = "0002";
 
