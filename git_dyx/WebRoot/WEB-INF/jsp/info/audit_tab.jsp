@@ -22,6 +22,10 @@
 					客服代办（第一步-申请资料填写与审核）
 				</c:if>
 				<input type="hidden" name="metr.tabAudt" id="tabAudt" value="${empty metr.tabAudt ? (ord.ordType eq ORD_TYPE_KFDB ? '00000' : '11111') : metr.tabAudt}" />
+				<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['0']['1']}" />
+				<input type="hidden" name="attach[0].atchId" x="0" y="1" value="${attach.atchId}" />
+				<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['0']['2']}" />
+				<input type="hidden" name="attach[1].atchId" x="0" y="2" value="${attach.atchId}" />
 			</th>
 		</tr>
 	</thead>
@@ -40,12 +44,14 @@
 		<div class="info" metr="1">
 			<table cellpadding="0" cellspacing="0" class="listTb infoList nwTb">
 				<tbody>
+					<c:if test="${ord.ordType eq ORD_TYPE_KFDB}">
+						<tr>
+							<th width="30%">分期申请书编号：</th>
+							<td><input type="text" name="metr.metrNo" id="metrNo" value="${fn:trim(metr.metrNo)}" class="inp important" /></td>
+						</tr>
+					</c:if>
 					<tr>
-						<th width="30%">分期申请书编号：</th>
-						<td><input type="text" name="metr.metrNo" id="metrNo" value="${fn:trim(metr.metrNo)}" class="inp important" /></td>
-					</tr>
-					<tr>
-						<th>姓名：</th>
+						<th width="30%">姓名：</th>
 						<td><input type="text" name="metr.aplName" value="${fn:trim(metr.aplName)}" class="inp important" /></td>
 					</tr>
 					<tr>
@@ -292,8 +298,8 @@
 						<td width="50">&nbsp;</td>
 						<td width="200">
 							<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['1']['1']}" />
-							<input type="hidden" name="attach[0].atchId" x="1" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
-							<span class="photo" onclick="uploadAttach('0', $(this).find('img'));">
+							<input type="hidden" name="attach[2].atchId" x="1" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
+							<span class="photo" onclick="uploadAttach('2', $(this).find('img'));">
 								<strong>正面</strong>
 								<c:set var="src">data:image/${attach.atchExt};base64,${attach.atchPreview}</c:set>
 								<img width="150" height="120" src="${empty attach.atchName ? '' : src}" class="toggle-exclude" />
@@ -301,8 +307,8 @@
 						</td>
 						<td>
 							<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['1']['2']}" />
-							<input type="hidden" name="attach[1].atchId" x="1" y="2" value="${attach.atchId}" rel="${attach.atchTitle}" />
-							<span class="photo" onclick="uploadAttach('1', $(this).find('img'));">
+							<input type="hidden" name="attach[3].atchId" x="1" y="2" value="${attach.atchId}" rel="${attach.atchTitle}" />
+							<span class="photo" onclick="uploadAttach('3', $(this).find('img'));">
 								<strong>反面</strong>
 								<c:set var="src">data:image/${attach.atchExt};base64,${attach.atchPreview}</c:set>
 								<img width="150" height="120" src="${empty attach.atchName ? '' : src}" class="toggle-exclude" />
@@ -318,8 +324,8 @@
 						<td>&nbsp;</td>
 						<td>
 							<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['2']['1']}" />
-							<input type="hidden" name="attach[2].atchId" x="2" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
-							<span class="photo" onclick="uploadAttach('2', $(this).find('img'));">
+							<input type="hidden" name="attach[4].atchId" x="2" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
+							<span class="photo" onclick="uploadAttach('4', $(this).find('img'));">
 								<strong>正面</strong>
 								<c:set var="src">data:image/${attach.atchExt};base64,${attach.atchPreview}</c:set>
 								<img width="150" height="120" src="${empty attach.atchName ? '' : src}" class="toggle-exclude" />
@@ -327,8 +333,8 @@
 						</td>
 						<td>
 							<c:set var="attach" value="${metr.dyxOrdMetrAttachMap['3']['1']}" />
-							<input type="hidden" name="attach[3].atchId" x="3" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
-							<span class="photo" onclick="uploadAttach('3', $(this).find('img'));">
+							<input type="hidden" name="attach[5].atchId" x="3" y="1" value="${attach.atchId}" rel="${attach.atchTitle}" />
+							<span class="photo" onclick="uploadAttach('5', $(this).find('img'));">
 								<strong>正面</strong>
 								<c:set var="src">data:image/${attach.atchExt};base64,${attach.atchPreview}</c:set>
 								<img width="150" height="120" src="${empty attach.atchName ? '' : src}" class="toggle-exclude" />
@@ -345,8 +351,8 @@
 							<ul class="pts">
 								<c:forEach var="attach" items="${metr.dyxOrdMetrAttachMap['4']}" varStatus="stat">
 									<li>
-										<input type="hidden" name="attach[${stat.index + 4}].atchId" x="4" y="${attach.key}" value="${attach.value.atchId}" rel="${attach.value.atchTitle}" />
-										<span class="photo" onclick="uploadAttach('${stat.index + 4}', $(this).find('img'));">
+										<input type="hidden" name="attach[${stat.index + 6}].atchId" x="4" y="${attach.key}" value="${attach.value.atchId}" rel="${attach.value.atchTitle}" />
+										<span class="photo" onclick="uploadAttach('${stat.index + 6}', $(this).find('img'));">
 											<c:set var="src">data:image/${attach.value.atchExt};base64,${attach.value.atchPreview}</c:set>
 											<img width="150" height="120" src="${empty attach.value.atchName ? '' : src}" class="toggle-exclude" />
 										</span>
@@ -651,7 +657,16 @@
 					var data = new Array();
 					for(var i in arr) {
 						var obj = $("[name='" + arr[i].name + "']");
-						if(!obj.is(".info :hidden") && obj.parents("#evalTb").size() == 0) {
+						
+// 						if(obj.parents("#evalTb").size() == 1) {
+// 							continue;
+// 						}
+
+// 						if(obj.parents(".info").size() == 1) {
+// 							continue;
+// 						}
+						
+						if(!obj.parents(".info").is(":hidden") && obj.parents("#evalTb").size() == 0) {
 							data.push(arr[i]);
 						}
 					}
@@ -743,7 +758,7 @@
 	function addAttach(obj) {
 		var size = $("[name$='].atchId']").size();
 		var html = '<li>'
-					+ '<input type="hidden" name="attach[' + size + '].atchId" x="4" y="' + (Number(size) - 3) + '" />'
+					+ '<input type="hidden" name="attach[' + size + '].atchId" x="4" y="' + (Number(size) - 5) + '" />'
 					+ '<span class="photo" onclick="uploadAttach(\'' + size + '\', $(this).find(\'img\'));">'
 						+ '<img width="150" height="120" class="toggle-exclude hide" />'
 					+ '</span>'

@@ -36,10 +36,10 @@ $(function() {
 			"metr.aplCompAddr": "required",
 			"metr.aplJobSpec": "required",
 			"metr.aplCompSize": "required",
-			"attach[0].atchId": "required",
-			"attach[1].atchId": "required",
 			"attach[2].atchId": "required",
 			"attach[3].atchId": "required",
+			"attach[4].atchId": "required",
+			"attach[5].atchId": "required",
 			"metr.tabAudt": "tabAudt"
 		},
    		messages: {
@@ -133,16 +133,16 @@ $(function() {
 			"metr.aplCompSize": {
 				required: validateMessage("单位规模", "select")
 			},
-			"attach[0].atchId": {
+			"attach[2].atchId": {
 				required: "请拍摄“身份证正面”照片并上传！"
 			},
-			"attach[1].atchId": {
+			"attach[3].atchId": {
 				required: "请拍摄“身份证反面”照片并上传！"
 			},
-			"attach[2].atchId": {
+			"attach[4].atchId": {
 				required: "请拍摄“储蓄卡正面”照片并上传！"
 			},
-			"attach[3].atchId": {
+			"attach[5].atchId": {
 				required: "请拍摄“手持身份证照”并上传！"
 			}
    		}
