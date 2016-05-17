@@ -18,7 +18,7 @@
 			</li>
 			<li><span>密码：</span><input type="password" name="userPwd" class="inp" value="${loginInfo.userPwd}" /></li>
 			<li><input type="button" name="button" value="登录" class="btn" onclick="login()" /></li>
-			<li>忘记密码？请<a href="javascript:" onclick="retrun false;">点击这里</a>重置密码！</li>
+			<li>忘记密码？请<a href="javascript:" onclick="resPwd();return false;">点击这里</a>重置密码！</li>
   		</ul>
 	</form>
 </div>
@@ -59,6 +59,18 @@
 			if(valid) {
 				form.submit();
 			}
+		});
+	}
+	
+	<%-- 忘记密码 --%>
+	function resPwd() {
+		dialogIframe({
+			id: "dialog-iframe-res-pwd",
+			url: "passport/pwd/reset",
+			height: 180,
+			width: 250,
+			titlebar: false,
+			buttons: null
 		});
 	}
 </script>

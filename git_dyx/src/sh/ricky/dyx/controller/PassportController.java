@@ -111,6 +111,7 @@ public class PassportController {
      * 
      * @return
      */
+    @Outer
     @RequestMapping("/pwd/reset")
     public String resetPwd() {
         return "passport/pwd_res";
