@@ -150,43 +150,39 @@
 	
 	<%-- 提交预审 --%>
 	function audit(actnId, actnName, memo) {
-		var form = $("#ordForm");
-		validateForm(form, function(result) {
-			if(result) {
-				callback();
-			}
-		});
-		
-		var callback = function() {
-			if(/(不通过|修改)/.test(actnName)) {
-				var html = "<div><textarea id='popupMemo'></textarea></div>";
-				var content = dialogMessage(html, null, true, {
-					buttons: {
-						"确认": function() {
-							var popupMemo = $("#popupMemo").val();
-							if($.trim(popupMemo) == "") {
-								alert("请选择操作意见！");
-							} else {
-								audit(actnId, null, popupMemo);
-								content.dialog("destroy").remove();
-							}
-						},
-						"取消": function() {
+		if(/(不通过|修改)/.test(actnName)) {
+			var html = "<div><textarea id='popupMemo'></textarea></div>";
+			var content = dialogMessage(html, null, true, {
+				buttons: {
+					"确认": function() {
+						var popupMemo = $("#popupMemo").val();
+						if($.trim(popupMemo) == "") {
+							alert("请选择操作意见！");
+						} else {
+							audit(actnId, null, popupMemo);
 							content.dialog("destroy").remove();
 						}
 					},
-					title: "不通过/需修改原因"
-				})
-			} else if (actnName === null) {
-				$("#actnId").val(actnId);
-				$("#memo").val(memo || "");
-				formSubmit();
-			} else {
-				dialogMessage("确认提交？", function(content) {
-					audit(actnId, null, null);
-					content.dialog("destroy").remove();
-				}, true);
-			}
+					"取消": function() {
+						content.dialog("destroy").remove();
+					}
+				},
+				title: "不通过/需修改原因"
+			})
+		} else if (actnName === null) {
+			$("#actnId").val(actnId);
+			$("#memo").val(memo || "");
+			formSubmit();
+		} else {
+			var form = $("#ordForm");
+			validateForm(form, function(result) {
+				if(result) {
+					dialogMessage("确认提交？", function(content) {
+						audit(actnId, null, null);
+						content.dialog("destroy").remove();
+					}, true);
+				}
+			});
 		}
 	}
 </script>
