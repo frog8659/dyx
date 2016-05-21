@@ -33,6 +33,7 @@
 						</c:forEach>
 					</select>
 				</td>
+				<th>其他：</th>
 				<td width="20%">
 					<input type="text" name="keyword" class="inpSr" value="${condition.keyword}" />
 				</td>
