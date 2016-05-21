@@ -1,6 +1,9 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="tools" prefix="t"%>
+
+<script type="text/javascript" src="js/dyx/validate.inst.js?t=${t:config('token.script')}"></script>
 
 <form id="instForm" action="${base}inst/upd" method="post">
 	<input type="hidden" name="inst.instId" value="${inst.instId}" />
@@ -50,6 +53,7 @@
 						<label><input type="radio" name="rule[${stat.index}].instPeriod" value="18" class="radio" ${rule.instPeriod eq "18" ? "checked" : ""} />18个月</label>
 						<label><input type="radio" name="rule[${stat.index}].instPeriod" value="24" class="radio" ${rule.instPeriod eq "24" ? "checked" : ""} />24个月</label>
 						<label><input type="radio" name="rule[${stat.index}].instPeriod" value="36" class="radio" ${rule.instPeriod eq "36" ? "checked" : ""} />36个月</label>
+						<input type="text" name="_rule[${stat.index}].instPeriod" value="${rule.instPeriod}" class="out" />
 	          		</td>
 					<td colspan="2" width="15%">
 						<input type="button" value="删除" class="btn grayBtn" onclick="delRule(this)" />
@@ -64,6 +68,55 @@
 </form>
 
 <script type="text/javascript">
+	$(function() {
+		<%-- 初始化校验规则 --%>
+		for(var i = 0; i < Number("${inst.dyxInstRuleCount}"); i++) {
+			addValidRules(i);
+		}
+		
+		<%-- 初始化单选框事件 --%>
+		$(":radio").live("change", function() {
+			$("[name='_" + $(this).attr("name") + "'").val($(this).val()).focusout();
+		});
+	});
+
+	<%-- 添加校验规则 --%>
+	function addValidRules(idx) {
+		$("[name='rule[" + idx + "].instMonRate']").rules("add", {
+			required: true,
+			number: true,
+			messages: {
+				required: validateMessage("月利率", "input"),
+				number: validateMessage("月利率", "number")
+			}
+		});
+		
+		$("[name='rule[" + idx + "].instFee']").rules("add", {
+			required: true,
+			number: true,
+			messages: {
+				required: validateMessage("手续费", "input"),
+				number: validateMessage("手续费", "number")
+			}
+		});
+		
+		$("[name='rule[" + idx + "].dwPayAmt']").rules("add", {
+			required: true,
+			number: true,
+			messages: {
+				required: validateMessage("首付金额", "input"),
+				number: validateMessage("首付金额", "number")
+			}
+		});
+		
+		$("[name='_rule[" + idx + "].instPeriod']").rules("add", {
+			required: true,
+			messages: {
+				required: validateMessage("分期周期", "select"),
+			}
+		});
+	}
+
 	<%-- 添加规则 --%>
 	function addRule() {
 		var form = $("#instForm");
@@ -96,6 +149,7 @@
 								+ '<label><input type="radio" name="rule[' + idx + '].instPeriod" value="18" class="radio" />18个月</label>'
 								+ '<label><input type="radio" name="rule[' + idx + '].instPeriod" value="24" class="radio" />24个月</label>'
 								+ '<label><input type="radio" name="rule[' + idx + '].instPeriod" value="36" class="radio" />36个月</label>'
+								+ '<input type="text" name="_rule[' + idx + '].instPeriod" class="out" />'
 			          		+ '</td>'
 							+ '<td colspan="2" width="15%">'
 			          			+ '<input type="button" value="删除" class="btn grayBtn" onclick="delRule(this)" />'
@@ -106,6 +160,9 @@
 				+ '</table>';
 
 		form.append(html).data("idx", idx + 1);
+		
+		<%-- 新增校验规则 --%>
+		addValidRules(idx);
 	}
 	
 	<%-- 删除规则 --%>
@@ -115,33 +172,38 @@
 	
 	<%-- 保存更新分期业务 --%>
 	function updateInst() {
-		$("#instForm").unbind("submit").submit(function() {
-			$(this).ajaxSubmit({
-				url: "${base}inst/upd",
-				success: function(msg) {
-					<%-- 失败提示 --%>
-					if(msg != "") {
-						alert(msg);
-						return false;
-					}
-					
-					<%-- 成功提示 --%>
-					dialogMessage("保存成功！", function(content) {
-						<%-- 刷新列表页面 --%>
-						parent.$("#srFrom").submit();
-						
-						<%-- 关闭提示窗口 --%>
-						content.dialog("destroy").remove();
-						
-						<%-- 关闭编辑窗口 --%>
-	                    parent.dialogIframeClose("dialog-iframe-inst");
+		var form = $("#instForm");
+		validateForm(form, function(result) {
+			if(result) {
+				form.unbind("submit").submit(function() {
+					$(this).ajaxSubmit({
+						url: "${base}inst/upd",
+						success: function(msg) {
+							<%-- 失败提示 --%>
+							if(msg != "") {
+								alert(msg);
+								return false;
+							}
+							
+							<%-- 成功提示 --%>
+							dialogMessage("保存成功！", function(content) {
+								<%-- 刷新列表页面 --%>
+								parent.$("#srFrom").submit();
+								
+								<%-- 关闭提示窗口 --%>
+								content.dialog("destroy").remove();
+								
+								<%-- 关闭编辑窗口 --%>
+			                    parent.dialogIframeClose("dialog-iframe-inst");
+							});
+						},
+						error: function() {
+							alert("网络异常，数据提交失败！");
+						}
 					});
-				},
-				error: function() {
-					alert("网络异常，数据提交失败！");
-				}
-			});
-			return false;
-		}).submit();
+					return false;
+				}).submit();
+			}
+		});
 	}
 </script>
