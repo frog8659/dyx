@@ -35,7 +35,8 @@
 						</select>
 					</td>
 				</c:if>
-				<td width="20%">
+				<th width="6%">其他：</th>
+				<td width="18%">
 					<input type="text" name="keyword" class="inpSr" value="${condition.keyword}" />
 				</td>
 				<td>
