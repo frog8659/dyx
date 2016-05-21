@@ -423,49 +423,52 @@
 		<%-- 初始化附件图片展示 --%>
 		loadImages();
 		
-		<%-- 初始化上传控件 --%>
-		var file = $("#attach").ajaxfileupload({
-			"action": "ord/upload",
-			"params": {
-				"atchId": function() {
-					return file.data("inp").val();
+		<%-- 根据最新需求，后台不再支持附件上传 --%>
+		if(false) {
+			<%-- 初始化上传控件 --%>
+			var file = $("#attach").ajaxfileupload({
+				"action": "ord/upload",
+				"params": {
+					"atchId": function() {
+						return file.data("inp").val();
+					},
+					"atchType": function() {
+						return file.data("inp").attr("x");
+					},
+					"dispOrd": function() {
+						return file.data("inp").attr("y");
+					},
+					"metrId": "${metr.metrId}"
 				},
-				"atchType": function() {
-					return file.data("inp").attr("x");
-				},
-				"dispOrd": function() {
-					return file.data("inp").attr("y");
-				},
-				"metrId": "${metr.metrId}"
-			},
-			"onComplete": function(data) {
-				window.top.loaded();
-				
-				if(typeof data.status != "undefined" && !data.status) {
-					alert("只支持jpg、jpeg、gif、png格式的图片附件！");
-					return false;
-				}
-				
-				if(typeof data.error != "undefined") {
-					alert(data.error);
-					return false;
-				}
-				
-				if(typeof data.attach != "undefined") {
-					this.data("inp").val(data.attach.atchId).attr("rel", data.attach.atchTitle);
-					this.data("img").attr("src", "data:image/" + data.attach.atchExt + ";base64," + data.attach.atchPreview).show().prev("strong").hide();
+				"onComplete": function(data) {
+					window.top.loaded();
 					
-					<%-- 重新加载附件图片 --%>
-					loadImages();
+					if(typeof data.status != "undefined" && !data.status) {
+						alert("只支持jpg、jpeg、gif、png格式的图片附件！");
+						return false;
+					}
+					
+					if(typeof data.error != "undefined") {
+						alert(data.error);
+						return false;
+					}
+					
+					if(typeof data.attach != "undefined") {
+						this.data("inp").val(data.attach.atchId).attr("rel", data.attach.atchTitle);
+						this.data("img").attr("src", "data:image/" + data.attach.atchExt + ";base64," + data.attach.atchPreview).show().prev("strong").hide();
+						
+						<%-- 重新加载附件图片 --%>
+						loadImages();
+					}
+				},
+				"onStart": function () {
+					window.top.loading();
+				},
+				"onCancel": function() {
+					window.top.loaded();
 				}
-			},
-			"onStart": function () {
-				window.top.loading();
-			},
-			"onCancel": function() {
-				window.top.loaded();
-			}
-	    });
+		    });
+		}
 	});
 
 	<%-- 加载图片 --%>
@@ -573,6 +576,11 @@
 	
 	<%-- 切换标签页可编辑性 --%>
 	function toggleTabEditable(idx, v) {
+		<%-- 根据最新需求，后台不再支持附件上传 --%>
+		if(idx == "5") {
+			v == "*";
+		}
+		
 		var tab = $("[metr='" + idx + "']");
 		toggleEditable(tab, v == "0");
 		var span = tab.find(".photo").css({
@@ -595,6 +603,15 @@
 	<%-- 切换操作按钮显示 --%>
 	function toggleBtn(v) {
 		var btns = $("[editable]");
+		
+		<%-- 根据最新需求，后台不再支持附件上传 --%>
+		var idx = $("[metr]:visible").first().attr("metr");
+		var edit = btns.filter("[value='修改']");
+		
+		if(idx == "5") {
+			edit.attr("editable", "${YES_VALUE}");
+		}
+		
 		if(typeof v == "undefined") {
 			btns.hide();
 		} else if(v == "0") {
@@ -603,6 +620,10 @@
 		} else {
 			btns.filter("[editable=${YES_VALUE}]").hide();
 			btns.filter("[editable=${NO_VALUE}]").show();
+		}
+
+		if(idx == "5") {
+			edit.attr("editable", "${NO_VALUE}");
 		}
 	}
 	
@@ -657,14 +678,6 @@
 					var data = new Array();
 					for(var i in arr) {
 						var obj = $("[name='" + arr[i].name + "']");
-						
-// 						if(obj.parents("#evalTb").size() == 1) {
-// 							continue;
-// 						}
-
-// 						if(obj.parents(".info").size() == 1) {
-// 							continue;
-// 						}
 						
 						if(!obj.parents(".info").is(":hidden") && obj.parents("#evalTb").size() == 0) {
 							data.push(arr[i]);

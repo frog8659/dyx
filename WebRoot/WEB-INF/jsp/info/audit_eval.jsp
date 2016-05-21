@@ -16,6 +16,7 @@
 				<c:if test="${ord.ordType eq ORD_TYPE_KFDB}">
 					客服代办（第二步-分期订单评价）
 				</c:if>
+				<input type="hidden" name="validEval" />
 			</th>
 		</tr>
 	</thead>

@@ -36,10 +36,16 @@ $(function() {
 			"metr.aplCompAddr": "required",
 			"metr.aplJobSpec": "required",
 			"metr.aplCompSize": "required",
+			/** 根据最新需求，后台不再支持附件上传
 			"attach[2].atchId": "required",
 			"attach[3].atchId": "required",
 			"attach[4].atchId": "required",
-			"attach[5].atchId": "required",
+			"attach[5].atchId": "required",*/
+			"validEval": {
+				required: function() {
+					return $("[name^='eval['][name$='].evalCont']").filter("[value='']").size() > 0;
+				}
+			},
 			"metr.tabAudt": "tabAudt"
 		},
    		messages: {
@@ -133,6 +139,7 @@ $(function() {
 			"metr.aplCompSize": {
 				required: validateMessage("单位规模", "select")
 			},
+			/** 根据最新需求，后台不再支持附件上传
 			"attach[2].atchId": {
 				required: "请拍摄“身份证正面”照片并上传！"
 			},
@@ -144,6 +151,9 @@ $(function() {
 			},
 			"attach[5].atchId": {
 				required: "请拍摄“手持身份证照”并上传！"
+			}*/
+			"validEval": {
+				required: "请完成所有分期订单评价！"
 			}
    		}
 	});
