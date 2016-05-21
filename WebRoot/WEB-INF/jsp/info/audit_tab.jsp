@@ -469,6 +469,11 @@
 				}
 		    });
 		}
+
+		<%-- 初始化紧急联系人校验规则 --%>
+		for(var i = 0; i < $("[name$='].contId']").size(); i++) {
+			addContactRules(i);
+		}
 	});
 
 	<%-- 加载图片 --%>
@@ -729,6 +734,30 @@
 			return false;
 		}).submit();
 	}
+	
+	<%-- 添加紧急联系人校验规则 --%>
+	function addContactRules(idx) {
+		$("[name='contact[" + idx + "].name']").rules("add", {
+			required: true,
+			messages: {
+				required: validateMessage("紧急联系人" + (Number(idx) + 1) + "姓名", "input")
+			}
+		});
+		
+		$("[name='contact[" + idx + "].rel']").rules("add", {
+			required: true,
+			messages: {
+				required: validateMessage("紧急联系人" + (Number(idx) + 1) + "与申请人关系", "select")
+			}
+		});
+		
+		$("[name='contact[" + idx + "].tel']").rules("add", {
+			required: true,
+			messages: {
+				required: validateMessage("紧急联系人" + (Number(idx) + 1) + "联系电话", "input")
+			}
+		});
+	}
 
 	<%-- 添加紧急联系人 --%>
 	function addContact() {
@@ -765,6 +794,9 @@
 					+ '</td>'
 				+ '</tr>';
 		$("#contTb").append(html);
+		
+		<%-- 新增校验规则 --%>
+		addContactRules(size);
 	}
 	
 	<%-- 添加其他辅助资料 --%>
