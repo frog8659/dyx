@@ -213,6 +213,13 @@ public class OrderService {
                         continue;
                     }
                 }
+
+                if (authList.contains(UserConstants.USER_AUTH_SHJS)) {
+                    if (segName.matches("(审核结束)")) {
+                        condition.addToAudtStatList(segId);
+                        continue;
+                    }
+                }
             }
         }
 
