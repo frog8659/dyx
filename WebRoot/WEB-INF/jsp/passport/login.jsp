@@ -67,8 +67,8 @@
 		dialogIframe({
 			id: "dialog-iframe-res-pwd",
 			url: "passport/pwd/reset",
-			height: 180,
-			width: 250,
+			height: 270,
+			width: 380,
 			titlebar: false,
 			buttons: null
 		});
