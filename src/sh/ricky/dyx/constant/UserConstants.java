@@ -28,6 +28,9 @@ public class UserConstants {
     /** 用户权限：审核结束 */
     public static final String USER_AUTH_SHJS = "1103";
 
+    /** 用户权限：贷后资料管理 */
+    public static final String USER_AUTH_DHZLGL = "2001";
+
     /** 用户权限：分期业务管理 */
     public static final String USER_AUTH_FQYWGL = "6000";
 

@@ -7,7 +7,7 @@
 <script type="text/javascript" src="js/page/page.search.js?t=${t:config('token.script')}"></script>
 
 <div class="search">
-	<form id="srForm" action="${base}ord/audit/list" method="post">
+	<form id="srForm" action="${base}ord/audit/list/${sort}?ordType=${condition.ordType}" method="post">
 		<table cellpadding="0" cellspacing="0" class="srTb">
 			<tr>
 				<th>订单日期：</th>
@@ -38,7 +38,6 @@
 					<input type="text" name="keyword" class="inpSr" value="${condition.keyword}" />
 				</td>
 				<td>
-					<input type="hidden" name="ordType" value="${condition.ordType}" />
 					<input type="hidden" name="pageNo" id="pageNo" value="${condition.pageNo}" />
 					<input type="submit" name="button" value="查询" class="btn" />
 				</td>
@@ -79,7 +78,7 @@
 				<c:forEach var="ord" items="${ordPage.result}" varStatus="stat">
 					<tr onclick="toggleHighlight(this)">
 						<td>${stat.count}</td>
-						<td><a href="javascript:" onclick="detail('${ord.ordId}', event);">${fn:trim(ord.ordNo)}</a></td>
+						<td><a href="javascript:" onclick="detail('${ord.ordId}', '${sort}', event);">${fn:trim(ord.ordNo)}</a></td>
 						<td><fmt:formatDate value="${ord.ordDate}" pattern="yyyy-M-d" /></td>
 						<td>${dicRegion[ord.shopProv]}</td>
 						<td>${dicRegion[ord.shopCity]}</td>
@@ -136,9 +135,9 @@
 		}
 	}
 	
-	<%-- 查看订单详情 --%>
-	function detail(id, event) {
-		window.location = "${base}ord/audit/detail?id=" + id;
+	<%-- 进入订单详情界面 --%>
+	function detail(id, sort, event) {
+		window.location = "${base}ord/audit/detail/" + sort + "?id=" + id;
 
 		<%-- 禁止事件冒泡 --%>
 		event.stopPropagation();

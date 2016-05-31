@@ -10,6 +10,7 @@
 
 <form id="ordForm" action="${base}ord/audit" method="post">
 	<input type="hidden" name="token" id="token" value="${ord.token}" />
+	<input type="hidden" name="sort" id="sort" value="${sort}" />
 	<input type="hidden" name="ord.ordId" value="${ord.ordId}" />
 	<input type="hidden" name="flow.flowId" value="${flowId}" />
 	<input type="hidden" name="flow.flowSeg" value="${ord.audtStat}" />

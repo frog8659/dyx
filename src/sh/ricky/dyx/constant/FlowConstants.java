@@ -20,4 +20,12 @@ public class FlowConstants {
     public static final String FLOW_SEG_ZLYXG = "0008";
 
     /** ************************************************************************ */
+
+    /** 环节分类：分期订单预审 */
+    public static final String SEG_SORT_FQDDYS = "1";
+
+    /** 环节分类：分期订单管理 */
+    public static final String SEG_SORT_FQDDGL = "2";
+
+    /** ************************************************************************ */
 }

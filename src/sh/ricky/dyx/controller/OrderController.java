@@ -61,15 +61,57 @@ public class OrderController extends BaseBinder {
     private OrderService orderService;
 
     /**
-     * 预审列表
+     * 订单管理列表：自主办理订单
      * 
      * @param condition
      * @param model
      * @return
      */
-    @Permission(authId = { UserConstants.USER_AUTH_ZZBLDD, UserConstants.USER_AUTH_KFDBDD })
-    @RequestMapping("/audit/list")
-    public String auditList(OrderQueryCondition condition, Model model) {
+    @Permission(authId = UserConstants.USER_AUTH_ZZBLDD)
+    @RequestMapping(value = "/audit/list/" + FlowConstants.SEG_SORT_FQDDYS, params = "ordType=" + OrderConstants.ORD_TYPE_ZZBL)
+    public String zzblddAuditList(OrderQueryCondition condition, Model model) {
+        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDYS);
+        condition.setOrdType(OrderConstants.ORD_TYPE_ZZBL);
+        return this.auditList(condition, model);
+    }
+
+    /**
+     * 订单管理列表：客服代办订单
+     * 
+     * @param condition
+     * @param model
+     * @return
+     */
+    @Permission(authId = UserConstants.USER_AUTH_KFDBDD)
+    @RequestMapping(value = "/audit/list/" + FlowConstants.SEG_SORT_FQDDYS, params = "ordType=" + OrderConstants.ORD_TYPE_KFDB)
+    public String kfdbddAuditList(OrderQueryCondition condition, Model model) {
+        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDYS);
+        condition.setOrdType(OrderConstants.ORD_TYPE_KFDB);
+        return this.auditList(condition, model);
+    }
+
+    /**
+     * 订单管理列表：贷后资料管理
+     * 
+     * @param condition
+     * @param model
+     * @return
+     */
+    @Permission(authId = UserConstants.USER_AUTH_DHZLGL)
+    @RequestMapping("/audit/list/" + FlowConstants.SEG_SORT_FQDDGL)
+    public String dhzlglAuditList(OrderQueryCondition condition, Model model) {
+        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDGL);
+        return this.auditList(condition, model);
+    }
+
+    /**
+     * 订单管理列表
+     * 
+     * @param condition
+     * @param model
+     * @return
+     */
+    private String auditList(OrderQueryCondition condition, Model model) {
         // 查询分期订单页对象
         model.addAttribute("ordPage", orderService.findOrderWithPage(condition));
         // 返回查询条件
@@ -79,15 +121,16 @@ public class OrderController extends BaseBinder {
     }
 
     /**
-     * 预审详情
+     * 订单审核详情
      * 
+     * @param list
      * @param id
      * @param model
      * @return
      */
     @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
-    @RequestMapping("/audit/detail")
-    public String auditDetail(String id, Model model) {
+    @RequestMapping("/audit/detail/{sort}")
+    public String auditDetail(@PathVariable("sort") String sort, String id, Model model) {
         // 查询分期订单对象
         DyxOrd ord = orderService.getOrd(id, 1);
 
@@ -144,6 +187,9 @@ public class OrderController extends BaseBinder {
             model.addAttribute("ord", ord);
         }
 
+        // 返回订单环节分类
+        model.addAttribute("sort", sort);
+
         // 跳转至订单详情页面
         return "info/audit";
     }
@@ -179,7 +225,7 @@ public class OrderController extends BaseBinder {
     }
 
     /**
-     * 预审编辑更新
+     * 订单审核编辑更新
      * 
      * @param form
      * @return
@@ -213,7 +259,7 @@ public class OrderController extends BaseBinder {
     }
 
     /**
-     * 预审
+     * 订单审核
      * 
      * @param form
      * @return
@@ -237,7 +283,7 @@ public class OrderController extends BaseBinder {
         }
 
         // 返回预审列表
-        return "redirect:/ord/audit/list?ordType=" + ord.getOrdType();
+        return "redirect:/ord/audit/list/" + form.getSort() + "?ordType=" + ord.getOrdType();
     }
 
     /**

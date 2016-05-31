@@ -36,6 +36,8 @@ public class OrderForm {
 
     private String memo;
 
+    private String sort;
+
     /**
      * 从页面获取信息，并保存至订单对象
      * 
@@ -156,5 +158,13 @@ public class OrderForm {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }
