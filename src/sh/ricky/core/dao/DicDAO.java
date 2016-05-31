@@ -207,6 +207,15 @@ public class DicDAO extends BaseJdbcDAO {
     }
 
     /**
+     * 流程环节分类字典
+     * 
+     * @return
+     */
+    public Map<String, String> getDicSegSort() {
+        return this.getDic(JNDI_BUSINESS, "DIC_SEG", "SEG_ID", "SEG_SORT", null, null);
+    }
+
+    /**
      * 分期名称字典
      * 
      * @return
@@ -242,11 +251,7 @@ public class DicDAO extends BaseJdbcDAO {
         Map<String, String> map = new LinkedHashMap<String, String>();
         if (list != null) {
             for (UserInfo user : list) {
-                if ((user.getAuthList().contains(UserConstants.USER_AUTH_CS) || user.getAuthList().contains(UserConstants.USER_AUTH_FS))
-                        && (user.getAuthList().contains(UserConstants.USER_AUTH_GLDQYHCZRZ)
-                                || user.getAuthList().contains(UserConstants.USER_AUTH_GLSYYHCZRZ))) {
-                    map.put(user.getUserId(), user.getNickName());
-                }
+                map.put(user.getUserId(), user.getNickName());
             }
         }
 

@@ -192,29 +192,35 @@ public class OrderService {
             return Page.EMPTY_PAGE;
         }
 
-        // 根据功能权过滤查询列表
+        // 根据功能权和环节分类过滤查询列表
         List<String> authList = user.getAuthList();
         if (authList != null) {
             Map<String, String> dicSeg = DicConstants.getInstance().getDicSeg();
+            Map<String, String> dicSegSort = DicConstants.getInstance().getDicSegSort();
 
             for (String segId : dicSeg.keySet()) {
                 String segName = dicSeg.get(segId);
+                String segSort = dicSegSort.get(segId);
 
-                if (authList.contains(UserConstants.USER_AUTH_CS)) {
+                if (!StringUtils.equals(segSort, condition.getSegSort())) {
+                    continue;
+                }
+
+                if (authList.contains(UserConstants.USER_AUTH_FQDDYS_CS) || authList.contains(UserConstants.USER_AUTH_FQDDGL_CS)) {
                     if (segName.matches("(初审)")) {
                         condition.addToAudtStatList(segId);
                         continue;
                     }
                 }
 
-                if (authList.contains(UserConstants.USER_AUTH_FS)) {
+                if (authList.contains(UserConstants.USER_AUTH_FQDDYS_FS) || authList.contains(UserConstants.USER_AUTH_FQDDGL_FS)) {
                     if (segName.matches("(复审)")) {
                         condition.addToAudtStatList(segId);
                         continue;
                     }
                 }
 
-                if (authList.contains(UserConstants.USER_AUTH_SHJS)) {
+                if (authList.contains(UserConstants.USER_AUTH_FQDDYS_SHJS) || authList.contains(UserConstants.USER_AUTH_FQDDGL_SHJS)) {
                     if (segName.matches("(审核结束)")) {
                         condition.addToAudtStatList(segId);
                         continue;

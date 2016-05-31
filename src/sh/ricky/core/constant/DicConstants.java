@@ -41,8 +41,11 @@ public class DicConstants {
     /** 流程环节状态字典 */
     private Map<String, String> dicSegStat;
 
+    /** 流程环节分类字典 */
+    private Map<String, String> dicSegSort;
+
     /** 审核状态字典 */
-    private Map<String, List<String>> dicAudtStat;
+    private Map<String, Map<String, List<String>>> dicAudtStat;
 
     /** 分期名称字典 */
     private Map<String, String> dicInstName;
@@ -140,14 +143,25 @@ public class DicConstants {
         // 流程环节状态字典
         this.dicSegStat = dicDAO.getDicSegStat();
 
+        // 流程环节分类字典
+        this.dicSegSort = dicDAO.getDicSegSort();
+
         // 审核状态字典
-        this.dicAudtStat = new LinkedHashMap<String, List<String>>();
+        this.dicAudtStat = new LinkedHashMap<String, Map<String, List<String>>>();
+
+        for (String stat : dicSegSort.keySet()) {
+            String sort = dicSegSort.get(stat);
+            if (!dicAudtStat.containsKey(sort)) {
+                dicAudtStat.put(sort, new LinkedHashMap<String, List<String>>());
+            }
+        }
         for (String stat : dicSegStat.keySet()) {
             String statName = dicSegStat.get(stat);
-            if (!dicAudtStat.containsKey(statName)) {
-                dicAudtStat.put(statName, new ArrayList<String>());
+            String sort = dicSegSort.get(stat);
+            if (!dicAudtStat.get(sort).containsKey(statName)) {
+                dicAudtStat.get(sort).put(statName, new ArrayList<String>());
             }
-            dicAudtStat.get(statName).add(stat);
+            dicAudtStat.get(sort).get(statName).add(stat);
         }
 
         // 分期名称字典
@@ -337,7 +351,11 @@ public class DicConstants {
         return dicSegStat;
     }
 
-    public Map<String, List<String>> getDicAudtStat() {
+    public Map<String, String> getDicSegSort() {
+        return dicSegSort;
+    }
+
+    public Map<String, Map<String, List<String>>> getDicAudtStat() {
         return dicAudtStat;
     }
 

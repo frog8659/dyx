@@ -129,7 +129,7 @@ public class OrderDAO extends BaseDAO {
 
         if (StringUtils.isNotBlank(condition.getAudtStat())) {
             jpql.append(" and audtStat in (:audtStat)");
-            params.put("audtStat", DicConstants.getInstance().getDicAudtStat().get(condition.getAudtStat()));
+            params.put("audtStat", DicConstants.getInstance().getDicAudtStat().get(condition.getSegSort()).get(condition.getAudtStat()));
         }
 
         if (StringUtils.isNotBlank(condition.getKeyword())) {

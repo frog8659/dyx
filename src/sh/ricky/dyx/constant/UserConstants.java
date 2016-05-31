@@ -19,17 +19,26 @@ public class UserConstants {
     /** 用户权限：客服代办订单 */
     public static final String USER_AUTH_KFDBDD = "1002";
 
-    /** 用户权限：初审 */
-    public static final String USER_AUTH_CS = "1101";
+    /** 用户权限：分期订单预审-初审 */
+    public static final String USER_AUTH_FQDDYS_CS = "1101";
 
-    /** 用户权限：复审 */
-    public static final String USER_AUTH_FS = "1102";
+    /** 用户权限：分期订单预审-复审 */
+    public static final String USER_AUTH_FQDDYS_FS = "1102";
 
-    /** 用户权限：审核结束 */
-    public static final String USER_AUTH_SHJS = "1103";
+    /** 用户权限：分期订单预审-审核结束 */
+    public static final String USER_AUTH_FQDDYS_SHJS = "1103";
 
     /** 用户权限：贷后资料管理 */
     public static final String USER_AUTH_DHZLGL = "2001";
+
+    /** 用户权限：分期订单管理-初审 */
+    public static final String USER_AUTH_FQDDGL_CS = "2101";
+
+    /** 用户权限：分期订单管理-复审 */
+    public static final String USER_AUTH_FQDDGL_FS = "2102";
+
+    /** 用户权限：分期订单管理-审核结束 */
+    public static final String USER_AUTH_FQDDGL_SHJS = "2103";
 
     /** 用户权限：分期业务管理 */
     public static final String USER_AUTH_FQYWGL = "6000";

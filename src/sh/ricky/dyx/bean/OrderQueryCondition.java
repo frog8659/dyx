@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderQueryCondition extends QueryCondition {
+    private String segSort;
+
     private String ordId;
 
     private String ordNo;
@@ -29,6 +31,14 @@ public class OrderQueryCondition extends QueryCondition {
     private String opUserId;
 
     private List<String> audtStatList;
+
+    public String getSegSort() {
+        return segSort;
+    }
+
+    public void setSegSort(String segSort) {
+        this.segSort = segSort;
+    }
 
     public String getOrdId() {
         return ordId;
@@ -140,5 +150,4 @@ public class OrderQueryCondition extends QueryCondition {
         }
         this.audtStatList.add(stat);
     }
-
 }

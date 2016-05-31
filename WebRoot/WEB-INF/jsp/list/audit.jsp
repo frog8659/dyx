@@ -7,7 +7,7 @@
 <script type="text/javascript" src="js/page/page.search.js?t=${t:config('token.script')}"></script>
 
 <div class="search">
-	<form id="srForm" action="${base}ord/audit/list/${sort}?ordType=${condition.ordType}" method="post">
+	<form id="srForm" action="${base}ord/audit/list/${condition.segSort}?ordType=${condition.ordType}" method="post">
 		<table cellpadding="0" cellspacing="0" class="srTb">
 			<tr>
 				<th>订单日期：</th>
@@ -28,7 +28,7 @@
 				<td width="10%">
 					<select name="audtStat">
 						<option value="">-请选择审核状态-</option>
-						<c:forEach var="dic" items="${dicAudtStat}">
+						<c:forEach var="dic" items="${dicAudtStat[condition.segSort]}">
 							<option value="${dic.key}" ${dic.key eq condition.audtStat ? "selected" : ""}>${dic.key}</option>
 						</c:forEach>
 					</select>
@@ -78,7 +78,7 @@
 				<c:forEach var="ord" items="${ordPage.result}" varStatus="stat">
 					<tr onclick="toggleHighlight(this)">
 						<td>${stat.count}</td>
-						<td><a href="javascript:" onclick="detail('${ord.ordId}', '${sort}', event);">${fn:trim(ord.ordNo)}</a></td>
+						<td><a href="javascript:" onclick="detail('${ord.ordId}', '${condition.segSort}', event);">${fn:trim(ord.ordNo)}</a></td>
 						<td><fmt:formatDate value="${ord.ordDate}" pattern="yyyy-M-d" /></td>
 						<td>${dicRegion[ord.shopProv]}</td>
 						<td>${dicRegion[ord.shopCity]}</td>

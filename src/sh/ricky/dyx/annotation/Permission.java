@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(value = { ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
-    public abstract String[] authId();
+    public abstract String[] authId() default "";
 }

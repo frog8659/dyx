@@ -70,7 +70,7 @@ public class OrderController extends BaseBinder {
     @Permission(authId = UserConstants.USER_AUTH_ZZBLDD)
     @RequestMapping(value = "/audit/list/" + FlowConstants.SEG_SORT_FQDDYS, params = "ordType=" + OrderConstants.ORD_TYPE_ZZBL)
     public String zzblddAuditList(OrderQueryCondition condition, Model model) {
-        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDYS);
+        condition.setSegSort(FlowConstants.SEG_SORT_FQDDYS);
         condition.setOrdType(OrderConstants.ORD_TYPE_ZZBL);
         return this.auditList(condition, model);
     }
@@ -85,7 +85,7 @@ public class OrderController extends BaseBinder {
     @Permission(authId = UserConstants.USER_AUTH_KFDBDD)
     @RequestMapping(value = "/audit/list/" + FlowConstants.SEG_SORT_FQDDYS, params = "ordType=" + OrderConstants.ORD_TYPE_KFDB)
     public String kfdbddAuditList(OrderQueryCondition condition, Model model) {
-        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDYS);
+        condition.setSegSort(FlowConstants.SEG_SORT_FQDDYS);
         condition.setOrdType(OrderConstants.ORD_TYPE_KFDB);
         return this.auditList(condition, model);
     }
@@ -100,7 +100,7 @@ public class OrderController extends BaseBinder {
     @Permission(authId = UserConstants.USER_AUTH_DHZLGL)
     @RequestMapping("/audit/list/" + FlowConstants.SEG_SORT_FQDDGL)
     public String dhzlglAuditList(OrderQueryCondition condition, Model model) {
-        model.addAttribute("sort", FlowConstants.SEG_SORT_FQDDGL);
+        condition.setSegSort(FlowConstants.SEG_SORT_FQDDGL);
         return this.auditList(condition, model);
     }
 
@@ -128,7 +128,8 @@ public class OrderController extends BaseBinder {
      * @param model
      * @return
      */
-    @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
+    @Permission(authId = { UserConstants.USER_AUTH_FQDDYS_CS, UserConstants.USER_AUTH_FQDDYS_FS, UserConstants.USER_AUTH_FQDDGL_CS,
+            UserConstants.USER_AUTH_FQDDGL_FS })
     @RequestMapping("/audit/detail/{sort}")
     public String auditDetail(@PathVariable("sort") String sort, String id, Model model) {
         // 查询分期订单对象
@@ -230,7 +231,8 @@ public class OrderController extends BaseBinder {
      * @param form
      * @return
      */
-    @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
+    @Permission(authId = { UserConstants.USER_AUTH_FQDDYS_CS, UserConstants.USER_AUTH_FQDDYS_FS, UserConstants.USER_AUTH_FQDDGL_CS,
+            UserConstants.USER_AUTH_FQDDGL_FS })
     @ResponseBody
     @RequestMapping("/audit/upd")
     public Map<String, Object> auditUpdate(OrderForm form) {
@@ -264,7 +266,8 @@ public class OrderController extends BaseBinder {
      * @param form
      * @return
      */
-    @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
+    @Permission(authId = { UserConstants.USER_AUTH_FQDDYS_CS, UserConstants.USER_AUTH_FQDDYS_FS, UserConstants.USER_AUTH_FQDDGL_CS,
+            UserConstants.USER_AUTH_FQDDGL_FS })
     @RequestMapping("/audit")
     public String audit(OrderForm form) {
         // 根据表单信息更新订单对象
@@ -312,7 +315,7 @@ public class OrderController extends BaseBinder {
      * @param attach
      * @return
      */
-    @Permission(authId = UserConstants.USER_AUTH_CS)
+    @Permission
     @RequestMapping("/upload")
     public ResponseEntity<Map<String, Object>> upload(HttpServletRequest request, DyxOrdMetrAttach attach) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
@@ -375,7 +378,8 @@ public class OrderController extends BaseBinder {
      * @param uuid
      * @param name
      */
-    @Permission(authId = { UserConstants.USER_AUTH_CS, UserConstants.USER_AUTH_FS })
+    @Permission(authId = { UserConstants.USER_AUTH_FQDDYS_CS, UserConstants.USER_AUTH_FQDDYS_FS, UserConstants.USER_AUTH_FQDDGL_CS,
+            UserConstants.USER_AUTH_FQDDGL_FS })
     @ResponseBody
     @RequestMapping("/attach/{uuid}")
     public void attach(HttpServletResponse response, @PathVariable String uuid) {
