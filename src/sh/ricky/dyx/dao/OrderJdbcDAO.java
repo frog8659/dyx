@@ -51,7 +51,7 @@ public class OrderJdbcDAO extends BaseJdbcDAO {
             return null;
         }
 
-        StringBuilder sql = new StringBuilder("select a.orderno, a.in_price, b.inst_name, b.inst_period, b.sys_time, b.inst_mon_rate");
+        StringBuilder sql = new StringBuilder("select a.orderno, a.in_price, b.inst_name, b.inst_period, b.sys_time, b.inst_mon_rate, b.dw_pay_amt");
         sql.append(" from orders_consumer a, orders_consumer_installment b where a.orderno = b.orderno and a.orderno = ?");
 
         return super.findUnique(JNDI_EASYBIKE, sql.toString(), orderNo);

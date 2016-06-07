@@ -155,10 +155,22 @@ public class OrderController extends BaseBinder {
                 }
                 metr.setInstName((String) detail.get("inst_name"));
                 metr.setInstPeriod((String) detail.get("inst_period"));
+                metr.setInstOopAmt(((BigDecimal) detail.get("dw_pay_amt")).setScale(2, BigDecimal.ROUND_CEILING));
                 metr.setInstMonIntrRate((BigDecimal) detail.get("inst_mon_rate"));
+                metr.setInstMonServRate((BigDecimal) detail.get("inst_mon_rate"));
                 metr.setMetrDate((Date) detail.get("sys_time"));
                 metr.setApl((String) detail.get("consumer"));
                 metr.setAplTel((String) detail.get("telephone"));
+
+                if (ord.getOrdAmt() != null && metr.getInstOopAmt() != null) {
+                    metr.setInstAmt(ord.getOrdAmt().subtract(metr.getInstOopAmt()).setScale(2, BigDecimal.ROUND_CEILING));
+                }
+
+                if (metr.getInstAmt() != null && metr.getInstMonIntrRate() != null && StringUtils.isNotBlank(metr.getInstPeriod())
+                        && !BigDecimal.ZERO.equals(new BigDecimal(metr.getInstPeriod()))) {
+                    metr.setInstRepAmt(metr.getInstAmt().divide(new BigDecimal(metr.getInstPeriod()), BigDecimal.ROUND_CEILING)
+                            .multiply(BigDecimal.ONE.add(metr.getInstMonIntrRate())).setScale(2, BigDecimal.ROUND_CEILING));
+                }
             }
 
             // 设置流程状态
