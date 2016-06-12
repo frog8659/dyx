@@ -117,9 +117,14 @@
 		</tbody>
 	</table>
 
-	<jsp:include page="audit_tab.jsp" flush="true" />
+	<c:if test="${SEG_SORT_FQDDYS eq sort}">
+		<jsp:include page="info_01_tab.jsp" flush="true" />
+		<jsp:include page="info_01_eval.jsp" flush="true" />
+	</c:if>
 	
-	<jsp:include page="audit_eval.jsp" flush="true" />
+	<c:if test="${SEG_SORT_FQDDGL eq sort}">
+		<jsp:include page="info_02_tab.jsp" flush="true" />
+	</c:if>
 	
 	<c:forEach var="proc" items="${ord.dyxOrdProcSet}">
 		<div class="sesult">

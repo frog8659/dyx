@@ -8,6 +8,9 @@ public class FlowConstants {
     /** 流程编号：客服代办订单预审 */
     public static final String FLOW_ID_KFDBDDYS = "0002";
 
+    /** 流程编号：贷后资料协议审核 */
+    public static final String FLOW_ID_DHZLXYSH = "0003";
+
     /** ************************************************************************ */
 
     /** 流程环节：客服待填写 */
@@ -18,6 +21,9 @@ public class FlowConstants {
 
     /** 流程环节：资料已修改 */
     public static final String FLOW_SEG_ZLYXG = "0008";
+
+    /** 流程环节：协议待初审 */
+    public static final String FLOW_SEG_XYDCS = "0012";
 
     /** ************************************************************************ */
 

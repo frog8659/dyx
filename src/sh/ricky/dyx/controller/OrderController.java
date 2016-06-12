@@ -155,12 +155,16 @@ public class OrderController extends BaseBinder {
                 }
                 metr.setInstName((String) detail.get("inst_name"));
                 metr.setInstPeriod((String) detail.get("inst_period"));
-                metr.setInstOopAmt(((BigDecimal) detail.get("dw_pay_amt")).setScale(2, BigDecimal.ROUND_CEILING));
+                metr.setInstOopAmt((BigDecimal) detail.get("dw_pay_amt"));
                 metr.setInstMonIntrRate((BigDecimal) detail.get("inst_mon_rate"));
                 metr.setInstMonServRate((BigDecimal) detail.get("inst_mon_rate"));
                 metr.setMetrDate((Date) detail.get("sys_time"));
                 metr.setApl((String) detail.get("consumer"));
                 metr.setAplTel((String) detail.get("telephone"));
+
+                if (metr.getInstOopAmt() != null) {
+                    metr.setInstOopAmt(metr.getInstOopAmt().setScale(2, BigDecimal.ROUND_CEILING));
+                }
 
                 if (ord.getOrdAmt() != null && metr.getInstOopAmt() != null) {
                     metr.setInstAmt(ord.getOrdAmt().subtract(metr.getInstOopAmt()).setScale(2, BigDecimal.ROUND_CEILING));
@@ -176,22 +180,30 @@ public class OrderController extends BaseBinder {
             // 设置流程状态
             CfgFlow condition = new CfgFlow();
             condition.setFlowSeg(ord.getAudtStat());
-            if (StringUtils.equals(ord.getOrdType(), OrderConstants.ORD_TYPE_ZZBL)) {
-                condition.setFlowId(FlowConstants.FLOW_ID_ZZBLDDYS);
-            } else if (StringUtils.equals(ord.getOrdType(), OrderConstants.ORD_TYPE_KFDB)) {
-                condition.setFlowId(FlowConstants.FLOW_ID_KFDBDDYS);
+
+            if (FlowConstants.SEG_SORT_FQDDYS.equals(sort)) {
+                // 根据订单类型设置流程
+                if (StringUtils.equals(ord.getOrdType(), OrderConstants.ORD_TYPE_ZZBL)) {
+                    condition.setFlowId(FlowConstants.FLOW_ID_ZZBLDDYS);
+                } else if (StringUtils.equals(ord.getOrdType(), OrderConstants.ORD_TYPE_KFDB)) {
+                    condition.setFlowId(FlowConstants.FLOW_ID_KFDBDDYS);
+                }
+
+                // 返回是否存在分期订单
+                model.addAttribute("isOrdExisted", orderService.countOrder(ord, 1) > 0);
+                // 返回门店分期订单业务数
+                model.addAttribute("stat1", orderService.countOrder(ord, 2));
+                // 返回门店受理申请人所在区/县人员分期订单数
+                model.addAttribute("stat2", orderService.countOrder(ord, 3));
+                // 返回门店所在区/县受理申请人所在区/县人员分期订单数
+                model.addAttribute("stat3", orderService.countOrder(ord, 4));
+                // 返回门店所在省级市受理申请人所在区/县人员分期订单数
+                model.addAttribute("stat4", orderService.countOrder(ord, 5));
+            } else if (FlowConstants.SEG_SORT_FQDDGL.equals(sort)) {
+                // 设置协议审核流程
+                condition.setFlowId(FlowConstants.FLOW_ID_DHZLXYSH);
             }
 
-            // 返回是否存在分期订单
-            model.addAttribute("isOrdExisted", orderService.countOrder(ord, 1) > 0);
-            // 返回门店分期订单业务数
-            model.addAttribute("stat1", orderService.countOrder(ord, 2));
-            // 返回门店受理申请人所在区/县人员分期订单数
-            model.addAttribute("stat2", orderService.countOrder(ord, 3));
-            // 返回门店所在区/县受理申请人所在区/县人员分期订单数
-            model.addAttribute("stat3", orderService.countOrder(ord, 4));
-            // 返回门店所在省级市受理申请人所在区/县人员分期订单数
-            model.addAttribute("stat4", orderService.countOrder(ord, 5));
             // 返回流程操作列表
             model.addAttribute("flowList", FlowUtil.getFlowList(condition));
             // 返回流程ID

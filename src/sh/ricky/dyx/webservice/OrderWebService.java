@@ -129,8 +129,10 @@ public class OrderWebService {
             } else if (OrderConstants.ORD_TYPE_KFDB.equals(ordType)) {
                 ord.setAudtStat(FlowConstants.FLOW_SEG_KFDTX);
             }
-        } else {
+        } else if (FlowConstants.SEG_SORT_FQDDYS.equals(form.getSort())) {
             ord.setAudtStat(FlowConstants.FLOW_SEG_ZLYXG);
+        } else if (FlowConstants.SEG_SORT_FQDDGL.equals(form.getSort())) {
+            ord.setAudtStat(FlowConstants.FLOW_SEG_XYDCS);
         }
 
         // 校验订单令牌，校验不通过则返回空
@@ -145,6 +147,11 @@ public class OrderWebService {
 
         // 根据表单内容更新订单对象
         form.update(ord);
+
+        // 初始化标签页审核状态
+        if (ord.getDyxOrdMetr() != null) {
+            ord.getDyxOrdMetr().setTabAudt(null);
+        }
 
         // 保存或更新订单
         try {

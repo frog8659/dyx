@@ -169,7 +169,7 @@ background-size:cover;
 .focus { width:600px; height:330px; overflow:hidden; position:absolute; top:0; right:0; }
 
 /* Form */
-.btn { width:100px; height:30px; background:#ff0042; font-size:14px; line-height:28px; text-align:center; color:#fff; border-style:none; cursor:pointer; }
+.btn { min-width:100px; padding:0 10px; height:30px; background:#ff0042; font-size:14px; line-height:28px; text-align:center; color:#fff; border-style:none; cursor:pointer; }
 .greenBtn { background:#063; }
 .blueBtn { background:#205da5; }
 .grayBtn { background:#ddd; color:#333; }

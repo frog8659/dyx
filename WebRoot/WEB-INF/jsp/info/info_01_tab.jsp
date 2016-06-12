@@ -583,7 +583,7 @@
 	function toggleTabEditable(idx, v) {
 		<%-- 根据最新需求，后台不再支持附件上传 --%>
 		if(idx == "5") {
-			v == "*";
+			v = "*";
 		}
 		
 		var tab = $("[metr='" + idx + "']");
@@ -813,6 +813,9 @@
 	
 	<%-- 附件上传 --%>
 	function uploadAttach(idx, img) {
+		<%-- 根据最新需求，后台不再支持附件上传 --%>
+		return false;
+		
 		if($("#tabAudt").val()[4] != "0") {
 			<%--  当前不允许编辑 --%>
 			return false;

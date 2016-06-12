@@ -2,9 +2,10 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="sh.ricky.core.constant.DicConstants"%>
 <%@ page import="sh.ricky.core.constant.GlobalConstants"%>
+<%@ page import="sh.ricky.dyx.constant.FlowConstants"%>
+<%@ page import="sh.ricky.dyx.constant.InstConstants"%>
 <%@ page import="sh.ricky.dyx.constant.OrderConstants"%>
 <%@ page import="sh.ricky.dyx.constant.UserConstants"%>
-<%@ page import="sh.ricky.dyx.constant.InstConstants"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -30,6 +31,10 @@
 
 <%-- 权限编号 --%>
 <c:set var="USER_AUTH_GLSYYHCZRZ" value="<%=UserConstants.USER_AUTH_GLSYYHCZRZ%>" scope="request" />
+
+<%-- 环节分类 --%>
+<c:set var="SEG_SORT_FQDDYS" value="<%=FlowConstants.SEG_SORT_FQDDYS%>" scope="request" />
+<c:set var="SEG_SORT_FQDDGL" value="<%=FlowConstants.SEG_SORT_FQDDGL%>" scope="request" />
 
 <%-- 字典：角色字典 --%>
 <c:set var="dicRole" value="<%=DicConstants.getInstance().getDicRole()%>" scope="request" />
