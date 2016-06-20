@@ -301,7 +301,14 @@ public class DicConstants {
         dicClientStat.put("0006", "审核不通过");
         dicClientStat.put("0007", "资料已上传");
         dicClientStat.put("0008", "资料已上传");
-        dicClientStat.put("0009", "资料已上传");
+        dicClientStat.put("0009", "订单已取消");
+        dicClientStat.put("0010", "征信已通过");
+        dicClientStat.put("0011", "贷后资料重新上传");
+        dicClientStat.put("0012", "贷后资料审核中");
+        dicClientStat.put("0013", "未通过贷后资料审核");
+        dicClientStat.put("0014", "贷后资料审核中");
+        dicClientStat.put("0015", "未通过贷后资料审核");
+        dicClientStat.put("0016", "可交付");
     }
 
     public void refreshDicInstName() {
