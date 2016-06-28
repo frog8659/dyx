@@ -1,5 +1,6 @@
 package sh.ricky.dyx.form;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -71,6 +72,17 @@ public class OrderForm {
                 dyxOrdMetrAttachSet.addAll(this.attach);
                 dyxOrd.getDyxOrdMetr().setDyxOrdMetrAttachSet(dyxOrdMetrAttachSet);
             } else {
+                List<String> list = new ArrayList<String>();
+                for (DyxOrdMetrAttach a : this.attach) {
+                    if (!list.contains(a.getAtchType())) {
+                        list.add(a.getAtchType());
+                    }
+                }
+                for (DyxOrdMetrAttach a : dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet()) {
+                    if (!list.contains(a.getAtchType())) {
+                        this.attach.add(a);
+                    }
+                }
                 FormUtil.updateSet(dyxOrd.getDyxOrdMetr().getDyxOrdMetrAttachSet(), this.attach);
             }
         }
