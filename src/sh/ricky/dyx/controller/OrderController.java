@@ -101,6 +101,7 @@ public class OrderController extends BaseBinder {
     @RequestMapping("/audit/list/" + FlowConstants.SEG_SORT_FQDDGL)
     public String dhzlglAuditList(OrderQueryCondition condition, Model model) {
         condition.setSegSort(FlowConstants.SEG_SORT_FQDDGL);
+        condition.setOrdType(null);
         return this.auditList(condition, model);
     }
 
@@ -309,7 +310,7 @@ public class OrderController extends BaseBinder {
             return GlobalConstants.FORWARD_ERROR;
         }
 
-        // 返回预审列表
+        // 返回列表页面
         return "redirect:/ord/audit/list/" + form.getSort() + "?ordType=" + ord.getOrdType();
     }
 
