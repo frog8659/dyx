@@ -1,6 +1,6 @@
 package sh.ricky.core.dao;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +9,8 @@ import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.query.ParamLocationRecognizer;
+import org.hibernate.util.StringHelper;
 
 import sh.ricky.core.bean.Page;
 import sh.ricky.core.exception.DAOException;
@@ -52,38 +54,58 @@ public class BaseDAOSupport {
     private Query create(EntityManager em, String ql, int opt, Object... params) {
         Query query = null;
 
-        if (params == null) {
-            // 无参数，直接生成适配的Query对象
-
+        if (ParamLocationRecognizer.parseLocations(ql).getNamedParameterDescriptionMap().isEmpty()) {
+            // 命名参数集合为空，认定当前QL无参数，或以?为参数占位符
             query = this.createAdaptor(em, ql, opt);
-        } else if (params.length == 1 && params[0] instanceof Map) {
-            // 集合类型参数，将命名参数统一转为位置参数
-
-            Map<Integer, Object> map = new HashMap<Integer, Object>();
-            Map<?, ?> parametersMap = (Map<?, ?>) params[0];
-            int p = 1;
-            for (Object k : parametersMap.keySet()) {
-                if (k instanceof String) {
-                    ql = ql.replaceAll(":" + k, "?" + p);
-                    map.put(p++, parametersMap.get(k));
-                } else if (k instanceof Integer) {
-                    ql = ql.replaceAll("\\?" + k, "?" + p);
-                    map.put(p++, parametersMap.get(k));
+            // 根据参数位置进行参数设值
+            if (params != null) {
+                for (int i = 1; i <= params.length; i++) {
+                    query.setParameter(i, params[i - 1]);
                 }
             }
-
-            query = this.createAdaptor(em, ql, opt);
-
-            for (int i = 1; i <= map.size(); i++) {
-                query.setParameter(i, map.get(i));
-            }
-        } else {
-            // 不定长参数，认定为位置参数，根据参数位置进行设置
-
-            query = this.createAdaptor(em, ql, opt);
-
-            for (int i = 1; i <= params.length; i++) {
-                query.setParameter(i, params[i - 1]);
+        } else if (params != null) {
+            // 命名参数集合不为空，认定当前QL使用命名参数
+            String[] tokens = StringHelper.split(" \n\r\f\t(),", ql, true);
+            // 将QL中的命名参数统一替换为jpa风格占位符
+            int p = 1;
+            if (params.length == 1 && params[0] instanceof Map) {
+                // 传入参数为集合类型
+                Map<?, ?> parametersMap = (Map<?, ?>) params[0];
+                // 重新整理传入参数
+                List<Object> list = new ArrayList<Object>();
+                for (int i = 0; i < tokens.length; i++) {
+                    Object param = null;
+                    if (tokens[i].startsWith(":")) {
+                        param = parametersMap.get(tokens[i].substring(1));
+                    } else if (tokens[i].startsWith("?")) {
+                        param = parametersMap.get(new Integer(tokens[i].substring(1)));
+                    }
+                    if (param != null) {
+                        list.add(param);
+                    }
+                    if (tokens[i].startsWith(":") || tokens[i].startsWith("?")) {
+                        tokens[i] = "?" + p++;
+                    }
+                }
+                // 通过新QL生成Query对象
+                query = this.createAdaptor(em, StringHelper.join("", tokens), opt);
+                // 根据新参数进行参数设值
+                for (int i = 1; i <= list.size(); i++) {
+                    query.setParameter(i, list.get(i - 1));
+                }
+            } else {
+                // 传入参数为非集合类型
+                for (int i = 0; i < tokens.length; i++) {
+                    if (tokens[i].startsWith(":") || tokens[i].startsWith("?")) {
+                        tokens[i] = "?" + p++;
+                    }
+                }
+                // 通过新QL生成Query对象
+                query = this.createAdaptor(em, StringHelper.join("", tokens), opt);
+                // 根据参数位置进行参数设值
+                for (int i = 1; i <= params.length; i++) {
+                    query.setParameter(i, params[i - 1]);
+                }
             }
         }
 
