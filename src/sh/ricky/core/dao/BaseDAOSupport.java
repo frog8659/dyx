@@ -53,12 +53,13 @@ public class BaseDAOSupport {
      */
     private Query create(EntityManager em, String ql, int opt, Object... params) {
         Query query = null;
+        ParamLocationRecognizer plr = ParamLocationRecognizer.parseLocations(ql);
 
-        if (ParamLocationRecognizer.parseLocations(ql).getNamedParameterDescriptionMap().isEmpty()) {
+        if (plr.getNamedParameterDescriptionMap().isEmpty()) {
             // 命名参数集合为空，认定当前QL无参数，或以?为参数占位符
             query = this.createAdaptor(em, ql, opt);
             // 根据参数位置进行参数设值
-            if (params != null) {
+            if (params != null && !plr.getOrdinalParameterLocationList().isEmpty()) {
                 for (int i = 1; i <= params.length; i++) {
                     query.setParameter(i, params[i - 1]);
                 }
