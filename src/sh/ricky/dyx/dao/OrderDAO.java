@@ -137,6 +137,9 @@ public class OrderDAO extends BaseDAO {
             params.put("keyword", "%" + condition.getKeyword() + "%");
         }
 
+        // 根据订单日期倒序
+        jpql.append(" order by ordDate desc");
+        
         return super.findByJPQLWithPage(jpql.toString(), condition.getPageNo(), condition.getPageSize(), params);
     }
 
