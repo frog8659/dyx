@@ -323,10 +323,10 @@ $(document).ready(function() {
 		return $(element).is(":filled") ? _validIdCard(value, birthday, gender) : true;
 	});
 	
-	// 判断手机号是否正确
-	$.validator.addMethod("mobile", function(value, element) { 
-		return this.optional(element) || /^(1|00861|(\+861))+\d{10}$/.test(value); 
-	}); 
+	// 判断手机号码格式是否正确
+	$.validator.addMethod("mobile", function(value, element) {
+		 return this.optional(element) || /^1[3|4|5|7|8][0-9]{9}$/.test(value);
+	});
 
 	// 判断是否为整数
 	$.validator.addMethod("int", function(value, element) {

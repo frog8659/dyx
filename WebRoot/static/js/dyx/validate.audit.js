@@ -8,11 +8,20 @@ $(function() {
 		rules: {
 			"metr.metrNo": "required",
 			"metr.aplName": "required",
-			"metr.aplIdc": "required",
-			"metr.aplMob": "required",
+			"metr.aplIdc": {
+				required: true,
+				idcard: true
+			},
+			"metr.aplMob": {
+				required: true,
+				mobile: true
+			},
 			"metr.aplBank": "required",
 			"metr.aplBankCard": "required",
-			"metr.aplBankMob": "required",
+			"metr.aplBankMob": {
+				required: true,
+				mobile: true
+			},
 			"metr.aplIdcExp": "required",
 			"metr.aplAge": "required",
 			"metr.aplSex": "required",
@@ -56,10 +65,12 @@ $(function() {
 				required: validateMessage("姓名", "input")
 			},
 			"metr.aplIdc": {
-				required: validateMessage("身份证号", "input")
+				required: validateMessage("身份证号", "input"),
+				idcard: validateMessage("身份证号", "format")
 			},
 			"metr.aplMob": {
-				required: validateMessage("手机号码", "input")
+				required: validateMessage("手机号码", "input"),
+				mobile: validateMessage("手机号码", "format")
 			},
 			"metr.aplBank": {
 				required: validateMessage("发卡银行", "select")
@@ -68,7 +79,8 @@ $(function() {
 				required: validateMessage("银行卡号", "input")
 			},
 			"metr.aplBankMob": {
-				required: validateMessage("银行预留手机号", "input")
+				required: validateMessage("银行预留手机号", "input"),
+				mobile: validateMessage("银行预留手机号", "format")
 			},
 			"metr.aplIdcExp": {
 				required: validateMessage("身份证有效期", "select")
