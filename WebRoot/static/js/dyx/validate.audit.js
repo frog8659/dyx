@@ -3,6 +3,11 @@ $(function() {
 		return value != "" && !/0/.test(value) && !/1/.test(value);
 	}, "请先确保所有资料均已审核！");
 	
+	$.validator.addMethod("bankCard", function(value, element) {
+		return value != "" && !/^\d{16}|\d{19}$/.test(value);
+	}, "银行卡号必须为16或19位数字！");
+	
+
 	$("#ordForm").validate({
 		ignore: ".ignore",
 		rules: {
@@ -17,7 +22,10 @@ $(function() {
 				mobile: true
 			},
 			"metr.aplBank": "required",
-			"metr.aplBankCard": "required",
+			"metr.aplBankCard": {
+				required: true,
+				bankCard: true
+			},
 			"metr.aplBankMob": {
 				required: true,
 				mobile: true
