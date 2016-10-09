@@ -23,7 +23,10 @@ $(function() {
 				mobile: true
 			},
 			"metr.aplIdcExp": "required",
-			"metr.aplAge": "required",
+			"metr.aplAge": {
+				required: true,
+				range: [18, 65]
+			},
 			"metr.aplSex": "required",
 			"metr.aplEdu": "required",
 			"metr.aplMari": "required",
@@ -86,7 +89,8 @@ $(function() {
 				required: validateMessage("身份证有效期", "select")
 			},
 			"metr.aplAge": {
-				required: validateMessage("年龄", "input")
+				required: validateMessage("年龄", "input"),
+				range: "“年龄”必须在18岁至65岁之间！"
 			},
 			"metr.aplSex": {
 				required: validateMessage("性别", "select")
