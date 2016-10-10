@@ -592,6 +592,16 @@
 			v = "*";
 		}
 		
+		<%-- 至少添加5个紧急联系人 --%>
+		if(idx == "4" && v == "0") {
+			var contact = $("[name^='contact['][name$='].name']").size();
+			if(contact < 5) {
+				for(var i = 0; i < 5 - contact; i++) {
+					addContact();
+				}
+			}
+		}
+		
 		var tab = $("[metr='" + idx + "']");
 		toggleEditable(tab, v == "0");
 		var span = tab.find(".photo").css({
