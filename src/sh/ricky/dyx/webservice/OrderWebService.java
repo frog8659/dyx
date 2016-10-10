@@ -130,7 +130,12 @@ public class OrderWebService {
                 ord.setAudtStat(FlowConstants.FLOW_SEG_KFDTX);
             }
         } else if (FlowConstants.SEG_SORT_FQDDYS.equals(form.getSort())) {
-            ord.setAudtStat(FlowConstants.FLOW_SEG_ZLYXG);
+            String ordType = form.getOrd().getOrdType();
+            if (OrderConstants.ORD_TYPE_ZZBL.equals(ordType)) {
+                ord.setAudtStat(FlowConstants.FLOW_SEG_ZLYXG);
+            } else if (OrderConstants.ORD_TYPE_KFDB.equals(ordType)) {
+                ord.setAudtStat(FlowConstants.FLOW_SEG_KFDTX);
+            }
         } else if (FlowConstants.SEG_SORT_FQDDGL.equals(form.getSort())) {
             ord.setAudtStat(FlowConstants.FLOW_SEG_XYDCS);
         }
