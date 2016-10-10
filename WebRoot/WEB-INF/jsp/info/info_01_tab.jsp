@@ -86,7 +86,7 @@
 						<td><input type="text" name="metr.aplIdcExp" value="<fmt:formatDate value='${metr.aplIdcExp}' pattern='yyyy-MM-dd' />" class="inp Wdate important" /></td>
 					</tr>
 					<tr>
-						<th>年龄：</th>
+						<th>年龄（周岁）：</th>
 						<td><input type="text" name="metr.aplAge" value="${fn:trim(metr.aplAge)}" class="inp important" /></td>
 					</tr>
 				</tbody>
@@ -154,7 +154,7 @@
 						</td>
 					</tr>
 					<tr>
-						<th>本地居住年限：</th>
+						<th>本地居住年限（年）：</th>
 						<td><input type="text" name="metr.aplResdPeriod" value="${fn:trim(metr.aplResdPeriod)}" class="inp important" /></td>
 					</tr>
 					<tr>
@@ -163,7 +163,7 @@
 					</tr>
 					<tr>
 						<th>固定电话：</th>
-						<td><input type="text" name="metr.aplTel" value="${fn:trim(metr.aplTel)}" class="inp important" /></td>
+						<td><input type="text" name="metr.aplTel" value="${fn:trim(metr.aplTel)}" class="inp" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -209,11 +209,11 @@
 						</td>
 					</tr>
 					<tr>
-						<th>税后月收入：</th>
+						<th>税后月收入（元）：</th>
 						<td><input type="text" name="metr.aplJobIncome" id="aplJobIncome" value="${metr.aplJobIncome}" class="inp important" /></td>
 					</tr>
 					<tr>
-						<th>现单位工作年限：</th>
+						<th>现单位工作年限（年）：</th>
 						<td><input type="text" name="metr.aplJobYear" value="${fn:trim(metr.aplJobYear)}" class="inp important" /></td>
 					</tr>
 					<tr>
@@ -252,7 +252,12 @@
 		<div class="info" metr="4">
 			<table cellpadding="0" cellspacing="0" class="listTb infoList nwTb toggle-include">
 				<tbody>
-					<tr><th colspan="2"><a href="javascript:" onclick="addContact();return false;">【添加联系人】</a></th></tr>
+					<tr>
+						<th colspan="2">
+							<input type="hidden" name="validContact" />
+							<a href="javascript:" onclick="addContact();return false;">【添加联系人】</a>
+						</th>
+					</tr>
 				</tbody>
 			</table>
 			<table cellpadding="0" cellspacing="0" class="listTb infoList nwTb">

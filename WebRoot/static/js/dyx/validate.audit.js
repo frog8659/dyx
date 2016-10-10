@@ -33,6 +33,7 @@ $(function() {
 			"metr.aplIdcExp": "required",
 			"metr.aplAge": {
 				required: true,
+				digits: true,
 				range: [18, 65]
 			},
 			"metr.aplSex": "required",
@@ -43,15 +44,26 @@ $(function() {
 			"metr.aplDist": "required",
 			"metr.aplAddr": "required",
 			"metr.aplHomeStat": "required",
-			"metr.aplResdPeriod": "required",
-			"metr.aplMail": "required",
-			"metr.aplTel": "required",
+			"metr.aplResdPeriod": {
+				required: true,
+				digits: true
+			},
+			"metr.aplMail": {
+				required: true,
+				email: true
+			},
 			"metr.aplEmpType": "required",
 			"metr.aplCompany": "required",
 			"metr.aplCompNatu": "required",
 			"metr.aplJobTitle": "required",
-			"metr.aplJobIncome": "required",
-			"metr.aplJobYear": "required",
+			"metr.aplJobIncome": {
+				required: true,
+				digits: true
+			},
+			"metr.aplJobYear": {
+				required: true,
+				digits: true
+			},
 			"metr.aplCompTel": "required",
 			"metr.aplCompAddr": "required",
 			"metr.aplJobSpec": "required",
@@ -64,6 +76,11 @@ $(function() {
 			"validEval": {
 				required: function() {
 					return $("[name^='eval['][name$='].evalCont']").filter("[value='']").size() > 0;
+				}
+			},
+			"validContact": {
+				required: function() {
+					return $("[name^='contact['][name$='].name']").size() >= 5;
 				}
 			},
 			"metr.tabAudt": "tabAudt"
@@ -98,6 +115,7 @@ $(function() {
 			},
 			"metr.aplAge": {
 				required: validateMessage("年龄", "input"),
+				digits: validateMessage("年龄", "number"),
 				range: "“年龄”必须在18岁至65岁之间！"
 			},
 			"metr.aplSex": {
@@ -125,13 +143,12 @@ $(function() {
 				required: validateMessage("现居住宅状况", "select")
 			},
 			"metr.aplResdPeriod": {
-				required: validateMessage("本地居住年限", "input")
+				required: validateMessage("本地居住年限", "input"),
+				digits: validateMessage("本地居住年限", "number")
 			},
 			"metr.aplMail": {
-				required: validateMessage("电子邮箱", "input")
-			},
-			"metr.aplTel": {
-				required: validateMessage("固定电话", "input")
+				required: validateMessage("电子邮箱", "input"),
+				email: validateMessage("电子邮箱", "format")
 			},
 			"metr.aplEmpType": {
 				required: validateMessage("受雇类型", "select")
@@ -146,10 +163,12 @@ $(function() {
 				required: validateMessage("职务级别", "select")
 			},
 			"metr.aplJobIncome": {
-				required: validateMessage("税后月收入", "input")
+				required: validateMessage("税后月收入", "input"),
+				digits: validateMessage("税后月收入", "integer")
 			},
 			"metr.aplJobYear": {
-				required: validateMessage("现单位工作年限", "input")
+				required: validateMessage("现单位工作年限", "input"),
+				digits: validateMessage("现单位工作年限", "number")
 			},
 			"metr.aplCompTel": {
 				required: validateMessage("单位电话", "input")
@@ -178,6 +197,9 @@ $(function() {
 			}*/
 			"validEval": {
 				required: "请完成所有分期订单评价！"
+			},
+			"validContact": {
+				required: "请至少添加5名紧急联系人！"
 			}
    		}
 	});
