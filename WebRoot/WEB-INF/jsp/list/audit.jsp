@@ -39,7 +39,7 @@
 				</td>
 				<td>
 					<input type="hidden" name="pageNo" id="pageNo" value="${condition.pageNo}" />
-					<input type="submit" name="button" value="查询" class="btn" />
+					<input type="submit" name="button" value="查询" class="btn" onclick="$('#pageNo').val('1')" />
 				</td>
 			</tr>
 		</table>
