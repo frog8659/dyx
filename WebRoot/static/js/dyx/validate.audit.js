@@ -80,7 +80,7 @@ $(function() {
 			},
 			"validContact": {
 				required: function() {
-					return $("[name^='contact['][name$='].name']").size() >= 5;
+					return $("[name^='contact['][name$='].name']").size() < 5;
 				}
 			},
 			"metr.tabAudt": "tabAudt"
