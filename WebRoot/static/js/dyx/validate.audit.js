@@ -15,7 +15,7 @@ $(function() {
 			"metr.aplName": "required",
 			"metr.aplIdc": {
 				required: true,
-				idcard: true
+				idcard: ["", $("[name='metr.aplSex'").val()]
 			},
 			"metr.aplMob": {
 				required: true,

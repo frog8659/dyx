@@ -274,6 +274,7 @@ var _validIdCard = function(cardNo, b, g) {
 	if(g && g != "" && (gender % 2 != g % 2)) return false;
 	if(b && b != "" && b != birthday) return false;
 	re = birthday.match(/^((19|20)\d{2})[-](\d{2})[-](\d{2})$/);
+	if(re == null) return false;
 	var year = re[1];
 	var month = re[3] * 1 - 1;
 	var day = re[4];
@@ -314,13 +315,9 @@ $(document).ready(function() {
 	// 判断身份证号是否正确
 	$.validator.addMethod("idcard", function(value, element, param) {
 		value = $.trim(value);
-		if(typeof param[0] != "undefined") {
-			var cetfType = $("#" + param[0] + " option:selected").val();
-			if(cetfType != "1") return true; // 仅当证件类型为身份证时进行校验
-		}
-		var birthday = $("#" + param[1]).val();
-		var gender = $("#" + param[2] + " option:selected").val();
-		return $(element).is(":filled") ? _validIdCard(value, birthday, gender) : true;
+		birthday = param[0] === true ? "" : (param[0] || "");
+		gender = param[0] === true ? "" : (param[1] || "");
+		return this.optional(element) || _validIdCard(value, birthday, gender);
 	});
 	
 	// 判断手机号码格式是否正确
