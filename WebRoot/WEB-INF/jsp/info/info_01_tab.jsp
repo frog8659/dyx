@@ -210,7 +210,7 @@
 					</tr>
 					<tr>
 						<th>税后月收入（元）：</th>
-						<td><input type="text" name="metr.aplJobIncome" id="aplJobIncome" value="<fmt:formatNumber groupingUsed="false" value="${metr.aplJobIncome}" />" class="inp important" /></td>
+						<td><input type="text" name="metr.aplJobIncome" id="aplJobIncome" value="<fmt:formatNumber type="number" value="${metr.aplJobIncome}" />" class="inp important" /></td>
 					</tr>
 					<tr>
 						<th>现单位工作年限（年）：</th>
