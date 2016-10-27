@@ -53,7 +53,7 @@ public class PassportController {
             session.setAttribute(GlobalConstants.SESSION_USER, user);
         }
 
-        return "redirect:/home";
+        return "redirect:/frame";
     }
 
     /**
